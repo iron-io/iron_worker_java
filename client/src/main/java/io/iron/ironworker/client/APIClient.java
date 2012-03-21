@@ -145,7 +145,7 @@ public class APIClient {
         return response;
     }
 
-    private HttpResponse doRequest(HttpRequestBase request, String method, Map<String, String> params) throws APIException {
+    private void setRequestURI(HttpRequestBase request, String method, Map<String, String> params) throws APIException {
         List<NameValuePair> qParams = new ArrayList<NameValuePair>();
 
         if (params != null) {
@@ -168,6 +168,10 @@ public class APIClient {
         }
 
         request.setURI(uri);
+    }
+
+    private HttpResponse doRequest(HttpRequestBase request, String method, Map<String, String> params) throws APIException {
+        setRequestURI(request, method, params);
 
         request.addHeader("Content-Type", "application/json");
         request.addHeader("Authorization", "OAuth " + token);
@@ -177,16 +181,9 @@ public class APIClient {
     }
 
     private HttpResponse doFileRequest(File file, String method, Map<String, String> params) throws APIException {
-        URI uri = null;
-        try {
-            uri = URIUtils.createURI(scheme, host, port, "" + apiVersion + "/" + method, null, null);
-        } catch (URISyntaxException e) {
-            throw new APIException(null, e);
-        }
-
         HttpPost request = new HttpPost();
 
-        request.setURI(uri);
+        setRequestURI(request, method, null);
 
         request.addHeader("Authorization", "OAuth " + token);
         request.addHeader("User-Agent", userAgent);
