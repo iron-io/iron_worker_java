@@ -114,7 +114,7 @@ public class APIClient {
         this.maxRetries = maxRetries;
     }
 
-    private HttpResponse doRequestExecute(HttpRequestBase request) {
+    private HttpResponse doRequestExecute(HttpRequestBase request) throws APIException {
         HttpClient client = new DefaultHttpClient();
         HttpResponse response = null;
 
@@ -122,7 +122,6 @@ public class APIClient {
 
         while (currentTry < maxRetries) {
             try {
-                response = null;
                 response = client.execute(request);
 
                 if (response.getStatusLine().getStatusCode() != 503) {
@@ -132,8 +131,14 @@ public class APIClient {
                 try {
                     Thread.sleep((long)(Math.pow(4, currentTry) * 100 * Math.random()));
                 } catch (InterruptedException e) {
+                    if (currentTry == maxRetries - 1) {
+                        throw new APIException(null, e);
+                    }
                 }
             } catch (IOException e) {
+                if (currentTry == maxRetries - 1) {
+                    throw new APIException(null, e);
+                }
             }
 
             currentTry += 1;
@@ -142,7 +147,7 @@ public class APIClient {
         return response;
     }
 
-    private HttpResponse doRequest(HttpRequestBase request, String method, Map<String, String> params) {
+    private HttpResponse doRequest(HttpRequestBase request, String method, Map<String, String> params) throws APIException {
         List<NameValuePair> qParams = new ArrayList<NameValuePair>();
 
         if (params != null) {
@@ -161,7 +166,7 @@ public class APIClient {
         try {
             uri = URIUtils.createURI(scheme, host, port, "" + apiVersion + "/" + method, query, null);
         } catch (URISyntaxException e) {
-            return null;
+            throw new APIException(null, e);
         }
 
         request.setURI(uri);
@@ -173,12 +178,12 @@ public class APIClient {
         return doRequestExecute(request);
     }
 
-    private HttpResponse doFileRequest(File file, String method, Map<String, String> params) {
+    private HttpResponse doFileRequest(File file, String method, Map<String, String> params) throws APIException {
         URI uri = null;
         try {
             uri = URIUtils.createURI(scheme, host, port, "" + apiVersion + "/" + method, null, null);
         } catch (URISyntaxException e) {
-            return null;
+            throw new APIException(null, e);
         }
 
         HttpPost request = new HttpPost();
@@ -194,7 +199,7 @@ public class APIClient {
             entity.addPart("data", new StringBody((new Gson()).toJson(params)));
             entity.addPart("file", new FileBody(file));
         } catch (UnsupportedEncodingException e) {
-            return null;
+            throw new APIException(null, e);
         }
 
         request.setEntity(entity);
@@ -203,19 +208,11 @@ public class APIClient {
     }
 
     private InputStream parseResponseGeneral(HttpResponse response) throws APIException {
-        if (response == null) {
-            throw new APIException("No response");
-        }
-
         InputStream result = null;
         try {
             result = response.getEntity().getContent();
         } catch (IOException e) {
-            throw new APIException("No content");
-        }
-
-        if (result == null) {
-            throw new APIException("No content");
+            throw new APIException(null, e);
         }
 
         if (response.getStatusLine().getStatusCode() != 200) {
@@ -223,10 +220,10 @@ public class APIClient {
             try {
                 r = IOUtils.toString(result);
             } catch (IOException e) {
-                throw new APIException("No content");
+                throw new APIException(null, e);
             }
 
-            throw new APIException(r);
+            throw new APIException(r, null);
         }
 
         return result;
@@ -236,14 +233,14 @@ public class APIClient {
         try {
             return IOUtils.toByteArray(parseResponseGeneral(response));
         } catch (IOException e) {
-            throw new APIException("No content");
+            throw new APIException(null, e);
         }
     }
     private String parseResponseAsString(HttpResponse response) throws APIException {
         try {
             return IOUtils.toString(parseResponseGeneral(response));
         } catch (IOException e) {
-            throw new APIException("No content");
+            throw new APIException(null, e);
         }
     }
 
@@ -268,7 +265,7 @@ public class APIClient {
         
         File f = new File(file);
         if (!f.exists()) {
-            throw new APIException("No file");
+            throw new APIException("File " + file + " not found", null);
         }
 
         return parseResponseAsJson(doFileRequest(f, "projects/" + projectId + "/codes", params));

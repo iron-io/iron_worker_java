@@ -2,8 +2,9 @@ package io.iron.ironworker.client;
 
 public class APIException extends Exception {
     private String message;
+    private Exception innerException;
     
-    public APIException(String message) {
+    public APIException(String message, Exception innerException) {
         this.message = message;
     }
 
@@ -11,7 +12,11 @@ public class APIException extends Exception {
         return message;
     }
 
+    public Exception getInnerException() {
+        return innerException;
+    }
+
     public String toString() {
-        return message;
+        return message != null ? message : innerException.toString();
     }
 }
