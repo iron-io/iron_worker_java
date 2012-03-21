@@ -127,21 +127,19 @@ public class APIClient {
                 if (response.getStatusLine().getStatusCode() != 503) {
                     return response;
                 }
-
-                try {
-                    Thread.sleep((long)(Math.pow(4, currentTry) * 100 * Math.random()));
-                } catch (InterruptedException e) {
-                    if (currentTry == maxRetries - 1) {
-                        throw new APIException(null, e);
-                    }
-                }
             } catch (IOException e) {
                 if (currentTry == maxRetries - 1) {
                     throw new APIException(null, e);
                 }
             }
 
-            currentTry += 1;
+            try {
+                Thread.sleep((long)(Math.pow(4, currentTry) * 100 * Math.random()));
+            } catch (InterruptedException e) {
+                throw new APIException(null, e);
+            }
+
+            currentTry++;
         }
 
         return response;
