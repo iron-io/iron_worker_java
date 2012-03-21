@@ -160,7 +160,8 @@ public class APIClient {
             query = null;
         }
 
-        URI uri = null;
+        URI uri;
+
         try {
             uri = URIUtils.createURI(scheme, host, port, "" + apiVersion + "/" + method, query, null);
         } catch (URISyntaxException e) {
@@ -203,7 +204,8 @@ public class APIClient {
     }
 
     private InputStream parseResponseGeneral(HttpResponse response) throws APIException {
-        InputStream result = null;
+        InputStream result;
+
         try {
             result = response.getEntity().getContent();
         } catch (IOException e) {
@@ -211,14 +213,11 @@ public class APIClient {
         }
 
         if (response.getStatusLine().getStatusCode() != 200) {
-            String r = null;
             try {
-                r = IOUtils.toString(result);
+                throw new APIException(IOUtils.toString(result), null);
             } catch (IOException e) {
                 throw new APIException(null, e);
             }
-
-            throw new APIException(r, null);
         }
 
         return result;
@@ -259,6 +258,7 @@ public class APIClient {
         params.put("file_name", runner);
         
         File f = new File(file);
+
         if (!f.exists()) {
             throw new APIException("File " + file + " not found", null);
         }
