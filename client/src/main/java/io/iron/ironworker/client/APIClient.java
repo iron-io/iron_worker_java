@@ -145,7 +145,7 @@ public class APIClient {
         return response;
     }
 
-    private void setRequestURI(HttpRequestBase request, String method, Map<String, String> params) throws APIException {
+    private void setRequestParams(HttpRequestBase request, String method, Map<String, String> params) throws APIException {
         List<NameValuePair> qParams = new ArrayList<NameValuePair>();
 
         if (params != null) {
@@ -169,14 +169,13 @@ public class APIClient {
         }
 
         request.setURI(uri);
+
+        request.addHeader("Authorization", "OAuth " + token);
+        request.addHeader("User-Agent", userAgent);
     }
 
     private HttpResponse doRequest(HttpRequestBase request, String method, Map<String, String> params) throws APIException {
-        setRequestURI(request, method, params);
-
-        request.addHeader("Content-Type", "application/json");
-        request.addHeader("Authorization", "OAuth " + token);
-        request.addHeader("User-Agent", userAgent);
+        setRequestParams(request, method, params);
 
         return doRequestExecute(request);
     }
@@ -184,10 +183,7 @@ public class APIClient {
     private HttpResponse doFileRequest(File file, String method, Map<String, String> params) throws APIException {
         HttpPost request = new HttpPost();
 
-        setRequestURI(request, method, null);
-
-        request.addHeader("Authorization", "OAuth " + token);
-        request.addHeader("User-Agent", userAgent);
+        setRequestParams(request, method, null);
 
         MultipartEntity entity = new MultipartEntity();
 
