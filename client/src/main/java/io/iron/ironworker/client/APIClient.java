@@ -28,75 +28,75 @@ import java.util.List;
 import java.util.Map;
 
 public class APIClient {
-	public static final String AWS_US_EAST_HOST = "worker-aws-us-east-1.iron.io";
+    public static final String AWS_US_EAST_HOST = "worker-aws-us-east-1.iron.io";
 
-	private String token;
-	private String projectId;
-	private String scheme;
-	private String host;
-	private int port;
-	private int apiVersion;
+    private String token;
+    private String projectId;
+    private String scheme;
+    private String host;
+    private int port;
+    private int apiVersion;
     private String userAgent;
     private int maxRetries;
 
-	public APIClient(String token, String projectId) {
-		this.token = token;
-		this.projectId = projectId;
-		this.scheme = "https";
-		this.host = AWS_US_EAST_HOST;
-		this.port = 443;
-		this.apiVersion = 2;
+    public APIClient(String token, String projectId) {
+        this.token = token;
+        this.projectId = projectId;
+        this.scheme = "https";
+        this.host = AWS_US_EAST_HOST;
+        this.port = 443;
+        this.apiVersion = 2;
         this.userAgent = "iron_worker_java-1.0.0";
         maxRetries = 5;
-	}
+    }
 
-	public String getToken() {
-		return token;
-	}
+    public String getToken() {
+        return token;
+    }
 
-	public void setToken(String token) {
-		this.token = token;
-	}
+    public void setToken(String token) {
+        this.token = token;
+    }
 
-	public String getProjectId() {
-		return projectId;
-	}
+    public String getProjectId() {
+        return projectId;
+    }
 
-	public void setProjectId(String projectId) {
-		this.projectId = projectId;
-	}
+    public void setProjectId(String projectId) {
+        this.projectId = projectId;
+    }
 
-	public String getScheme() {
-		return scheme;
-	}
+    public String getScheme() {
+        return scheme;
+    }
 
-	public void setScheme(String scheme) {
-		this.scheme = scheme;
-	}
+    public void setScheme(String scheme) {
+        this.scheme = scheme;
+    }
 
-	public String getHost() {
-		return host;
-	}
+    public String getHost() {
+        return host;
+    }
 
-	public void setHost(String host) {
-		this.host = host;
-	}
+    public void setHost(String host) {
+        this.host = host;
+    }
 
-	public int getPort() {
-		return port;
-	}
+    public int getPort() {
+        return port;
+    }
 
-	public void setPort(int port) {
-		this.port = port;
-	}
+    public void setPort(int port) {
+        this.port = port;
+    }
 
-	public int getAPIVersion() {
-		return apiVersion;
-	}
+    public int getAPIVersion() {
+        return apiVersion;
+    }
 
-	public void setAPIVersion(int apiVersion) {
-		this.apiVersion = apiVersion;
-	}
+    public void setAPIVersion(int apiVersion) {
+        this.apiVersion = apiVersion;
+    }
 
     public String getUserAgent() {
         return userAgent;
@@ -142,7 +142,7 @@ public class APIClient {
         return response;
     }
 
-	private HttpResponse doRequest(HttpRequestBase request, String method, Map<String, String> params) {
+    private HttpResponse doRequest(HttpRequestBase request, String method, Map<String, String> params) {
         List<NameValuePair> qParams = new ArrayList<NameValuePair>();
 
         if (params != null) {
@@ -166,12 +166,12 @@ public class APIClient {
 
         request.setURI(uri);
 
-		request.addHeader("Content-Type", "application/json");
+        request.addHeader("Content-Type", "application/json");
         request.addHeader("Authorization", "OAuth " + token);
         request.addHeader("User-Agent", userAgent);
 
         return doRequestExecute(request);
-	}
+    }
 
     private HttpResponse doFileRequest(File file, String method, Map<String, String> params) {
         URI uri = null;
