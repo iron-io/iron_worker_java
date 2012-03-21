@@ -244,11 +244,11 @@ public class APIClient {
     }
 
     public JsonObject codesList(Map<String, String> params) throws APIException {
-        return parseResponseAsJson(doRequest(new HttpGet(), "projects/" + projectId + "/codes", params));
+        return parseResponseAsJson(doRequest(new HttpGet(), String.format("projects/%s/codes", projectId), params));
     }
 
     public JsonObject codesGet(String id) throws APIException {
-        return parseResponseAsJson(doRequest(new HttpGet(), "projects/" + projectId + "/codes/" + id, null));
+        return parseResponseAsJson(doRequest(new HttpGet(), String.format("projects/%s/codes/%s", projectId, id), null));
     }
     
     public JsonObject codesCreate(String name, String file, String runtime, String runner) throws APIException {
@@ -263,18 +263,18 @@ public class APIClient {
             throw new APIException("File " + file + " not found", null);
         }
 
-        return parseResponseAsJson(doFileRequest(f, "projects/" + projectId + "/codes", params));
+        return parseResponseAsJson(doFileRequest(f, String.format("projects/%s/codes", projectId), params));
     }
 
     public JsonObject codesDelete(String id) throws APIException {
-        return parseResponseAsJson(doRequest(new HttpDelete(), "projects/" + projectId + "/codes/" + id, null));
+        return parseResponseAsJson(doRequest(new HttpDelete(), String.format("projects/%s/codes/%s", projectId, id), null));
     }
 
     public JsonObject codesRevisions(String id, Map<String, String> params) throws APIException {
-        return parseResponseAsJson(doRequest(new HttpGet(), "projects/" + projectId + "/codes/" + id + "/revisions", params));
+        return parseResponseAsJson(doRequest(new HttpGet(), String.format("projects/%s/codes/%s/revisions", projectId, id), params));
     }
 
     public byte[] codesDownload(String id, Map<String, String> params) throws APIException {
-        return parseResponseAsByteArray(doRequest(new HttpGet(), "projects/" + projectId + "/codes/" + id + "/download", params));
+        return parseResponseAsByteArray(doRequest(new HttpGet(), String.format("projects/%s/codes/%s/download", projectId, id), params));
     }
 }
