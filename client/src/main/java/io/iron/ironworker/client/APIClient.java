@@ -3,6 +3,7 @@ package io.iron.ironworker.client;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import io.iron.ironworker.client.builders.Params;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -24,7 +25,6 @@ import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -273,8 +273,8 @@ public class APIClient {
         return (new JsonParser()).parse(new InputStreamReader(parseResponseGeneral(response))).getAsJsonObject();
     }
 
-    public JsonObject codesList(Map<String, Object> params) throws APIException {
-        return parseResponseAsJson(doGetRequest(String.format("projects/%s/codes", projectId), params));
+    public JsonObject codesList(Map<String, Object> options) throws APIException {
+        return parseResponseAsJson(doGetRequest(String.format("projects/%s/codes", projectId), options));
     }
 
     public JsonObject codesGet(String id) throws APIException {
@@ -282,57 +282,49 @@ public class APIClient {
     }
 
     public JsonObject codesCreate(String name, String file, String runtime, String runner) throws APIException {
-        Map<String, Object> params = new HashMap<String, Object>();
-
-        params.put("name", name);
-        params.put("runtime", runtime);
-        params.put("file_name", runner);
-
         File f = new File(file);
 
         if (!f.exists()) {
             throw new APIException("File " + file + " not found", null);
         }
 
-        return parseResponseAsJson(doFileRequest(String.format("projects/%s/codes", projectId), (new Gson()).toJson(params), f));
+        String data = (new Gson()).toJson(Params.create("name", name, "runtime", runtime, "file_name", runner));
+
+        return parseResponseAsJson(doFileRequest(String.format("projects/%s/codes", projectId), data, f));
     }
 
     public JsonObject codesDelete(String id) throws APIException {
         return parseResponseAsJson(doDeleteRequest(String.format("projects/%s/codes/%s", projectId, id), null));
     }
 
-    public JsonObject codesRevisions(String id, Map<String, Object> params) throws APIException {
-        return parseResponseAsJson(doGetRequest(String.format("projects/%s/codes/%s/revisions", projectId, id), params));
+    public JsonObject codesRevisions(String id, Map<String, Object> options) throws APIException {
+        return parseResponseAsJson(doGetRequest(String.format("projects/%s/codes/%s/revisions", projectId, id), options));
     }
 
-    public byte[] codesDownload(String id, Map<String, Object> params) throws APIException {
-        return parseResponseAsByteArray(doGetRequest(String.format("projects/%s/codes/%s/download", projectId, id), params));
+    public byte[] codesDownload(String id, Map<String, Object> options) throws APIException {
+        return parseResponseAsByteArray(doGetRequest(String.format("projects/%s/codes/%s/download", projectId, id), options));
     }
 
-    public JsonObject tasksList(Map<String, Object> params) throws APIException {
-        return parseResponseAsJson(doGetRequest(String.format("projects/%s/tasks", projectId), params));
+    public JsonObject tasksList(Map<String, Object> options) throws APIException {
+        return parseResponseAsJson(doGetRequest(String.format("projects/%s/tasks", projectId), options));
     }
 
     public JsonObject tasksGet(String id) throws APIException {
         return parseResponseAsJson(doGetRequest(String.format("projects/%s/tasks/%s", projectId, id), null));
     }
 
-    public JsonObject tasksCreate(String code_name, String payload, Map<String, Object> params) throws APIException {
-        Map<String, Object> task = new HashMap<String, Object>();
+    public JsonObject tasksCreate(String code_name, String payload, Map<String, Object> options) throws APIException {
+        Map<String, Object> task = Params.create("code_name", code_name, "payload", payload);
 
-        task.put("code_name", code_name);
-        task.put("payload", payload);
-        task.putAll(params);
+        if (options != null) {
+            task.putAll(options);
+        }
 
         List<Map<String, Object>> tasks = new ArrayList<Map<String, Object>>();
 
         tasks.add(task);
 
-        Map<String, List<Map<String, Object>>> fullParams = new HashMap<String, List<Map<String, Object>>>();
-
-        fullParams.put("tasks", tasks);
-
-        return parseResponseAsJson(doPostRequest(String.format("projects/%s/tasks", projectId), (new Gson()).toJson(fullParams)));
+        return parseResponseAsJson(doPostRequest(String.format("projects/%s/tasks", projectId), (new Gson()).toJson(Params.create("tasks", tasks))));
     }
 
     public JsonObject tasksCancel(String id) throws APIException {
@@ -347,34 +339,30 @@ public class APIClient {
         return parseResponseAsString(doGetRequest(String.format("projects/%s/tasks/%s/log", projectId, id), null));
     }
 
-    public JsonObject tasksSetProgress(String id, Map<String, Object> params) throws APIException {
-        return parseResponseAsJson(doPostRequest(String.format("projects/%s/tasks/%s/progress", projectId, id), (new Gson()).toJson(params)));
+    public JsonObject tasksSetProgress(String id, Map<String, Object> options) throws APIException {
+        return parseResponseAsJson(doPostRequest(String.format("projects/%s/tasks/%s/progress", projectId, id), (new Gson()).toJson(options)));
     }
 
-    public JsonObject schedulesList(Map<String, Object> params) throws APIException {
-        return parseResponseAsJson(doGetRequest(String.format("projects/%s/schedules", projectId), params));
+    public JsonObject schedulesList(Map<String, Object> options) throws APIException {
+        return parseResponseAsJson(doGetRequest(String.format("projects/%s/schedules", projectId), options));
     }
 
     public JsonObject schedulesGet(String id) throws APIException {
         return parseResponseAsJson(doGetRequest(String.format("projects/%s/schedules/%s", projectId, id), null));
     }
 
-    public JsonObject schedulesCreate(String code_name, String payload, Map<String, Object> params) throws APIException {
-        Map<String, Object> schedule = new HashMap<String, Object>();
+    public JsonObject schedulesCreate(String code_name, String payload, Map<String, Object> options) throws APIException {
+        Map<String, Object> schedule = Params.create("code_name", code_name, "payload", payload);
 
-        schedule.put("code_name", code_name);
-        schedule.put("payload", payload);
-        schedule.putAll(params);
+        if (options != null) {
+            schedule.putAll(options);
+        }
 
         List<Map<String, Object>> schedules = new ArrayList<Map<String, Object>>();
 
         schedules.add(schedule);
 
-        Map<String, List<Map<String, Object>>> fullParams = new HashMap<String, List<Map<String, Object>>>();
-
-        fullParams.put("schedules", schedules);
-
-        return parseResponseAsJson(doPostRequest(String.format("projects/%s/schedules", projectId), (new Gson()).toJson(fullParams)));
+        return parseResponseAsJson(doPostRequest(String.format("projects/%s/schedules", projectId), (new Gson()).toJson(Params.create("schedules", schedule))));
     }
 
     public JsonObject schedulesCancel(String id) throws APIException {

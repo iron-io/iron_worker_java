@@ -10,25 +10,25 @@ public class CodeRevisionEntity extends BaseEntity {
     String projectId;
     String name;
     String runtime;
-    String fileName;
+    String runner;
     int revision;
     Date createdAt;
     Date updatedAt;
 
     public static CodeRevisionEntity fromJsonObject(JsonObject o) {
-        CodeRevisionEntity c = new CodeRevisionEntity();
+        CodeRevisionEntity cr = new CodeRevisionEntity();
 
-        c.id = o.get("id").getAsString();
-        c.codeId = o.get("code_id").getAsString();
-        c.projectId = o.get("project_id").getAsString();
-        c.name = o.get("name").getAsString();
-        c.runtime = o.get("runtime").getAsString();
-        c.fileName = o.get("file_name").getAsString();
-        c.revision = o.get("rev").getAsInt();
-        c.createdAt = parseDate(o.get("created_at").getAsString());
-        c.updatedAt = parseDate(o.get("updated_at").getAsString());
+        cr.id = parseString(o, "id");
+        cr.codeId = parseString(o, "code_id");
+        cr.projectId = parseString(o, "project_id");
+        cr.name = parseString(o, "name");
+        cr.runtime = parseString(o, "runtime");
+        cr.runner = parseString(o, "file_name");
+        cr.revision = parseInt(o, "rev");
+        cr.createdAt = parseDate(o, "created_at");
+        cr.updatedAt = parseDate(o, "updated_at");
 
-        return c;
+        return cr;
     }
 
     protected CodeRevisionEntity() {
@@ -54,8 +54,8 @@ public class CodeRevisionEntity extends BaseEntity {
         return runtime;
     }
 
-    public String getFileName() {
-        return fileName;
+    public String getRunner() {
+        return runner;
     }
 
     public int getRevision() {
