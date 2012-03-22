@@ -33,6 +33,8 @@ puts `java -jar MyWorker.jar -cp Xerces.jar`
 
 ## Upload Code Package
 
+You need to specify name by which you'll call your worker later and path to zip created at previous step.
+
 ```java
 import io.iron.ironworker.client.codes.JavaCode;
 
