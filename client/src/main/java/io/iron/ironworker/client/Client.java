@@ -3,7 +3,10 @@ package io.iron.ironworker.client;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import io.iron.ironworker.client.builders.PaginationOptions;
 import io.iron.ironworker.client.builders.Params;
+import io.iron.ironworker.client.builders.TaskOptions;
+import io.iron.ironworker.client.builders.TaskProgressOptions;
 import io.iron.ironworker.client.codes.BaseCode;
 import io.iron.ironworker.client.entities.CodeEntity;
 import io.iron.ironworker.client.entities.CodeRevisionEntity;
@@ -37,8 +40,12 @@ public class Client {
         return codesList;
     }
 
+    public List<CodeEntity> getCodes(PaginationOptions options) throws APIException {
+        return getCodes(options.create());
+    }
+
     public List<CodeEntity> getCodes() throws APIException {
-        return getCodes(null);
+        return getCodes((Map<String, Object>) null);
     }
 
     public CodeEntity getCode(String codeId) throws APIException {
@@ -65,19 +72,27 @@ public class Client {
         return codeRevisionsList;
     }
 
-    public List<CodeRevisionEntity> getCodeRevisions(String codeId) throws APIException {
-        return getCodeRevisions(codeId, null);
+    public List<CodeRevisionEntity> getCodeRevisions(String codeId, PaginationOptions options) throws APIException {
+        return getCodeRevisions(codeId, options.create());
     }
 
-    private byte[] downloadCode(String codeId, Map<String, Object> options) throws APIException {
+    public List<CodeRevisionEntity> getCodeRevisions(String codeId) throws APIException {
+        return getCodeRevisions(codeId, (Map<String, Object>) null);
+    }
+
+    public byte[] downloadCode(String codeId, Map<String, Object> options) throws APIException {
         return api.codesDownload(codeId, options);
     }
-    
+
+    public byte[] downloadCode(String codeId, int revision) throws APIException {
+        return downloadCode(codeId, Params.create("revision", revision));
+    }
+
     public byte[] downloadCode(String codeId) throws APIException {
         return downloadCode(codeId, null);
     }
 
-    private List<TaskEntity> getTasks(Map<String, Object> options) throws APIException {
+    public List<TaskEntity> getTasks(Map<String, Object> options) throws APIException {
         JsonObject tasks = api.tasksList(options);
 
         List<TaskEntity> tasksList = new ArrayList<TaskEntity>();
@@ -89,8 +104,12 @@ public class Client {
         return tasksList;
     }
 
+    public List<TaskEntity> getTasks(PaginationOptions options) throws APIException {
+        return getTasks(options.create());
+    }
+
     public List<TaskEntity> getTasks() throws APIException {
-        return getTasks(null);
+        return getTasks((Map<String, Object>) null);
     }
 
     public TaskEntity getTask(String taskId) throws APIException {
@@ -108,20 +127,28 @@ public class Client {
         return TaskEntity.fromJsonObject(task);
     }
 
+    public TaskEntity createTask(String codeName, Map<String, Object> params, TaskOptions options) throws APIException {
+        return createTask(codeName, params, options.create());
+    }
+
     public TaskEntity createTask(String codeName, Params params, Map<String, Object> options) throws APIException {
         return createTask(codeName, params.create(), options);
     }
 
+    public TaskEntity createTask(String codeName, Params params, TaskOptions options) throws APIException {
+        return createTask(codeName, params.create(), options.create());
+    }
+
     public TaskEntity createTask(String codeName, Map<String, Object> params) throws APIException {
-        return createTask(codeName, params, null);
+        return createTask(codeName, params, (Map<String, Object>) null);
     }
 
     public TaskEntity createTask(String codeName, Params params) throws APIException {
-        return createTask(codeName, params.create(), null);
+        return createTask(codeName, params.create(), (Map<String, Object>) null);
     }
 
     public TaskEntity createTask(String codeName) throws APIException {
-        return createTask(codeName, (Map<String, Object>) null, null);
+        return createTask(codeName, (Map<String, Object>) null, (Map<String, Object>) null);
     }
     
     public void cancelTask(String taskId) throws APIException {
@@ -140,7 +167,11 @@ public class Client {
         api.tasksSetProgress(taskId, options);
     }
 
+    public void setTaskProgress(String taskId, TaskProgressOptions options) throws APIException {
+        api.tasksSetProgress(taskId, options.create());
+    }
+
     public void setTaskProgress(String taskId) throws APIException {
-        api.tasksSetProgress(taskId, null);
+        setTaskProgress(taskId, (Map<String, Object>) null);
     }
 }

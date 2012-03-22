@@ -26,7 +26,7 @@ public class Params {
         params = new HashMap<String, Object>();
     }
     
-    public Params add(String key, String value) {
+    public Params add(String key, Object value) {
         params.put(key, value);
 
         return this;
