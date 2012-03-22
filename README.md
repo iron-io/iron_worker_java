@@ -45,11 +45,11 @@ client.createCode(code);
 Prefered way is to use provided builders like Params or TaskOptions, but you can fall back and pass Map&lt;String, Object&gt; instead.
 
 ```java
-// specififying some options
 import io.iron.ironworker.client.entities.TaskEntity;
 import io.iron.ironworker.client.builders.Params;
 import io.iron.ironworker.client.builders.TaskOptions;
 
+// specififying some options
 TaskEntity t = client.createTask("MyWorker",
         (new Params()).add("param", 13).add("another", "value"),
         (new TaskOptions()).priority(1).delay(60));
