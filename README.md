@@ -42,7 +42,7 @@ client.createCode(code);
 
 ## Run It
 
-Prefered way is to use provided builders like Params or TaskOptions, but you can fall back and pass Map<String, Object> instead.
+Prefered way is to use provided builders like Params or TaskOptions, but you can fall back and pass Map&lt;String, Object&gt; instead.
 
 ```java
 // specififying some options
