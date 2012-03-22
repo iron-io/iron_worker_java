@@ -6,8 +6,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Params {
-    private Map<String, Object> params;
-    
     public static Map<String, Object> create(Object... os) throws APIException {
         if (os.length % 2 != 0) {
             throw new APIException("Odd params number", null);
@@ -22,17 +20,10 @@ public class Params {
         return params;
     }
 
-    public Params() {
-        params = new HashMap<String, Object>();
-    }
-    
-    public Params add(String key, Object value) {
-        params.put(key, value);
-
-        return this;
+    public static ParamsObject add(String key, Object value) {
+        return (new ParamsObject()).add(key, value);
     }
 
-    public Map<String, Object> create() {
-        return params;
+    protected Params() {
     }
 }

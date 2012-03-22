@@ -1,34 +1,18 @@
 package io.iron.ironworker.client.builders;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class TaskOptions {
-    private Map<String, Object> options;
-
-    public TaskOptions() {
-        options = new HashMap<String, Object>();
+    public static TaskOptionsObject priority(int priority) {
+        return (new TaskOptionsObject()).priority(priority);
     }
 
-    public TaskOptions priority(int priority) {
-        options.put("priority", priority);
-
-        return this;
+    public static TaskOptionsObject timeout(int timeout) {
+        return (new TaskOptionsObject()).timeout(timeout);
     }
 
-    public TaskOptions timeout(int timeout) {
-        options.put("timeout", timeout);
-
-        return this;
+    public static TaskOptionsObject delay(int delay) {
+        return (new TaskOptionsObject()).delay(delay);
     }
 
-    public TaskOptions delay(int delay) {
-        options.put("delay", delay);
-
-        return this;
-    }
-
-    public Map<String, Object> create() {
-        return options;
+    protected TaskOptions() {
     }
 }

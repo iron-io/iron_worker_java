@@ -3,10 +3,7 @@ package io.iron.ironworker.client;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import io.iron.ironworker.client.builders.PaginationOptions;
-import io.iron.ironworker.client.builders.Params;
-import io.iron.ironworker.client.builders.TaskOptions;
-import io.iron.ironworker.client.builders.TaskProgressOptions;
+import io.iron.ironworker.client.builders.*;
 import io.iron.ironworker.client.codes.BaseCode;
 import io.iron.ironworker.client.entities.CodeEntity;
 import io.iron.ironworker.client.entities.CodeRevisionEntity;
@@ -40,7 +37,7 @@ public class Client {
         return codesList;
     }
 
-    public List<CodeEntity> getCodes(PaginationOptions options) throws APIException {
+    public List<CodeEntity> getCodes(PaginationOptionsObject options) throws APIException {
         return getCodes(options.create());
     }
 
@@ -72,7 +69,7 @@ public class Client {
         return codeRevisionsList;
     }
 
-    public List<CodeRevisionEntity> getCodeRevisions(String codeId, PaginationOptions options) throws APIException {
+    public List<CodeRevisionEntity> getCodeRevisions(String codeId, PaginationOptionsObject options) throws APIException {
         return getCodeRevisions(codeId, options.create());
     }
 
@@ -104,7 +101,7 @@ public class Client {
         return tasksList;
     }
 
-    public List<TaskEntity> getTasks(PaginationOptions options) throws APIException {
+    public List<TaskEntity> getTasks(PaginationOptionsObject options) throws APIException {
         return getTasks(options.create());
     }
 
@@ -127,15 +124,15 @@ public class Client {
         return TaskEntity.fromJsonObject(task);
     }
 
-    public TaskEntity createTask(String codeName, Map<String, Object> params, TaskOptions options) throws APIException {
+    public TaskEntity createTask(String codeName, Map<String, Object> params, TaskOptionsObject options) throws APIException {
         return createTask(codeName, params, options.create());
     }
 
-    public TaskEntity createTask(String codeName, Params params, Map<String, Object> options) throws APIException {
+    public TaskEntity createTask(String codeName, ParamsObject params, Map<String, Object> options) throws APIException {
         return createTask(codeName, params.create(), options);
     }
 
-    public TaskEntity createTask(String codeName, Params params, TaskOptions options) throws APIException {
+    public TaskEntity createTask(String codeName, ParamsObject params, TaskOptionsObject options) throws APIException {
         return createTask(codeName, params.create(), options.create());
     }
 
@@ -143,7 +140,7 @@ public class Client {
         return createTask(codeName, params, (Map<String, Object>) null);
     }
 
-    public TaskEntity createTask(String codeName, Params params) throws APIException {
+    public TaskEntity createTask(String codeName, ParamsObject params) throws APIException {
         return createTask(codeName, params.create(), (Map<String, Object>) null);
     }
 
@@ -167,7 +164,7 @@ public class Client {
         api.tasksSetProgress(taskId, options);
     }
 
-    public void setTaskProgress(String taskId, TaskProgressOptions options) throws APIException {
+    public void setTaskProgress(String taskId, TaskProgressOptionsObject options) throws APIException {
         api.tasksSetProgress(taskId, options.create());
     }
 

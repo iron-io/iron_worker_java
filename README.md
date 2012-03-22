@@ -53,8 +53,8 @@ import io.iron.ironworker.client.builders.TaskOptions;
 
 // specififying some options
 TaskEntity t = client.createTask("MyWorker",
-        (new Params()).add("param", 13).add("another", "value"),
-        (new TaskOptions()).priority(1).delay(60));
+        Params.add("param", 13).add("another", "value"),
+        TaskOptions.priority(1).delay(60));
 
 // alternate params syntax
 client.createTask("MyWorker", Params.create("param", 13, "another", "value"));
