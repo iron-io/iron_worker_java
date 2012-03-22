@@ -7,6 +7,7 @@ import io.iron.ironworker.client.builders.*;
 import io.iron.ironworker.client.codes.BaseCode;
 import io.iron.ironworker.client.entities.CodeEntity;
 import io.iron.ironworker.client.entities.CodeRevisionEntity;
+import io.iron.ironworker.client.entities.Codes;
 import io.iron.ironworker.client.entities.TaskEntity;
 
 import java.util.ArrayList;
@@ -25,23 +26,16 @@ public class Client {
         return api;
     }
     
-    public List<CodeEntity> getCodes(Map<String, Object> options) throws APIException {
+    public Codes getCodes(Map<String, Object> options) throws APIException {
         JsonObject codes = api.codesList(options);
-        
-        List<CodeEntity> codesList = new ArrayList<CodeEntity>();
-        
-        for (JsonElement code : codes.get("codes").getAsJsonArray()) {
-            codesList.add(CodeEntity.fromJsonObject(code.getAsJsonObject()));
-        }
-
-        return codesList;
+        return new Gson().fromJson(codes, Codes.class);
     }
 
-    public List<CodeEntity> getCodes(PaginationOptionsObject options) throws APIException {
+    public Codes getCodes(PaginationOptionsObject options) throws APIException {
         return getCodes(options.create());
     }
 
-    public List<CodeEntity> getCodes() throws APIException {
+    public Codes getCodes() throws APIException {
         return getCodes((Map<String, Object>) null);
     }
 
