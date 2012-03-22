@@ -1,8 +1,5 @@
 package io.iron.ironworker.client.builders;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class PaginationOptions {
     public static PaginationOptionsObject page(int page) {
         return (new PaginationOptionsObject()).page(page);

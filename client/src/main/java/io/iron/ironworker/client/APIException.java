@@ -6,6 +6,7 @@ public class APIException extends Exception {
     
     public APIException(String message, Exception innerException) {
         this.message = message;
+        this.innerException = innerException;
     }
 
     public String getMessage() {

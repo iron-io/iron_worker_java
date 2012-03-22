@@ -1,7 +1,5 @@
 package io.iron.ironworker.client.builders;
 
-import io.iron.ironworker.client.APIException;
-
 import java.util.HashMap;
 import java.util.Map;
 

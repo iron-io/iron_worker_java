@@ -362,7 +362,7 @@ public class APIClient {
 
         schedules.add(schedule);
 
-        return parseResponseAsJson(doPostRequest(String.format("projects/%s/schedules", projectId), (new Gson()).toJson(Params.create("schedules", schedule))));
+        return parseResponseAsJson(doPostRequest(String.format("projects/%s/schedules", projectId), (new Gson()).toJson(Params.create("schedules", schedules))));
     }
 
     public JsonObject schedulesCancel(String id) throws APIException {
