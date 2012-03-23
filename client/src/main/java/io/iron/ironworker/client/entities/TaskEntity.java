@@ -13,6 +13,10 @@ public class TaskEntity {
     String codeId;
     @SerializedName("code_name")
     String codeName;
+    @SerializedName("priority")
+    int priority;
+    @SerializedName("timeout")
+    int timeout;
     @SerializedName("status")
     String status;
     @SerializedName("start_time")
@@ -23,8 +27,6 @@ public class TaskEntity {
     int duration;
     @SerializedName("run_times")
     int runTimes;
-    @SerializedName("timeout")
-    int timeout;
     @SerializedName("payload")
     String payload;
     @SerializedName("percent")
@@ -55,6 +57,14 @@ public class TaskEntity {
         return codeName;
     }
 
+    public int getPriority() {
+        return priority;
+    }
+
+    public int getTimeout() {
+        return timeout;
+    }
+
     public String getStatus() {
         return status;
     }
@@ -73,10 +83,6 @@ public class TaskEntity {
 
     public int getRunTimes() {
         return runTimes;
-    }
-
-    public int getTimeout() {
-        return timeout;
     }
 
     public String getPayload() {
