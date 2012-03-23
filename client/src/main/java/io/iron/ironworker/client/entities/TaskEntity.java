@@ -1,47 +1,40 @@
 package io.iron.ironworker.client.entities;
 
-import com.google.gson.JsonObject;
+import com.google.gson.annotations.SerializedName;
 
 import java.util.Date;
 
-public class TaskEntity extends BaseEntity {
+public class TaskEntity extends {
+    @SerializedName("id")
     String id;
+    @SerializedName("project_id")
     String projectId;
+    @SerializedName("code_id")
     String codeId;
+    @SerializedName("code_name")
     String codeName;
+    @SerializedName("status")
     String status;
+    @SerializedName("start_time")
     Date startTime;
+    @SerializedName("end_time")
     Date endTime;
+    @SerializedName("duration")
     int duration;
+    @SerializedName("run_times")
     int runTimes;
+    @SerializedName("timeout")
     int timeout;
+    @SerializedName("payload")
     String payload;
+    @SerializedName("percent")
     int percent;
+    @SerializedName("msg")
     String msg;
+    @SerializedName("created_at")
     Date createdAt;
+    @SerializedName("updated_at")
     Date updatedAt;
-
-    public static TaskEntity fromJsonObject(JsonObject o) {
-        TaskEntity t = new TaskEntity();
-
-        t.id = parseString(o, "id");
-        t.projectId = parseString(o, "project_id");
-        t.codeId = parseString(o, "code_id");
-        t.codeName = parseString(o, "code_name");
-        t.status = parseString(o, "status");
-        t.startTime = parseDate(o, "start_time");
-        t.endTime = parseDate(o, "end_time");
-        t.duration = parseInt(o, "duration");
-        t.runTimes = parseInt(o, "run_times");
-        t.timeout = parseInt(o, "timeout");
-        t.payload = parseString(o, "payload");
-        t.percent = parseInt(o, "percent");
-        t.msg = parseString(o, "msg");
-        t.createdAt = parseDate(o, "created_at");
-        t.updatedAt = parseDate(o, "updated_at");
-        
-        return t;
-    }
 
     protected TaskEntity() {
     }

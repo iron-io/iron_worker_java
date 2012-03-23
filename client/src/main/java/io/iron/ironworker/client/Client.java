@@ -29,9 +29,11 @@ public class Client {
         JsonObject codes = api.codesList(options);
         
         List<CodeEntity> codesList = new ArrayList<CodeEntity>();
+
+        Gson gson = new Gson();
         
         for (JsonElement code : codes.get("codes").getAsJsonArray()) {
-            codesList.add(CodeEntity.fromJsonObject(code.getAsJsonObject()));
+            codesList.add(gson.fromJson(code, CodeEntity.class));
         }
 
         return codesList;
@@ -46,7 +48,7 @@ public class Client {
     }
 
     public CodeEntity getCode(String codeId) throws APIException {
-        return CodeEntity.fromJsonObject(api.codesGet(codeId));
+        return (new Gson()).fromJson(api.codesGet(codeId), CodeEntity.class);
     }
     
     public void createCode(BaseCode code) throws APIException {
@@ -62,8 +64,10 @@ public class Client {
 
         List<CodeRevisionEntity> codeRevisionsList = new ArrayList<CodeRevisionEntity>();
 
+        Gson gson = new Gson();
+        
         for (JsonElement codeRevision : codeRevisions.get("revisions").getAsJsonArray()) {
-            codeRevisionsList.add(CodeRevisionEntity.fromJsonObject(codeRevision.getAsJsonObject()));
+            codeRevisionsList.add(gson.fromJson(codeRevision, CodeRevisionEntity.class));
         }
 
         return codeRevisionsList;
@@ -94,8 +98,10 @@ public class Client {
 
         List<TaskEntity> tasksList = new ArrayList<TaskEntity>();
 
+        Gson gson = new Gson();
+        
         for (JsonElement task : tasks.get("tasks").getAsJsonArray()) {
-            tasksList.add(TaskEntity.fromJsonObject(task.getAsJsonObject()));
+            tasksList.add(gson.fromJson(task, TaskEntity.class));
         }
 
         return tasksList;
@@ -110,7 +116,7 @@ public class Client {
     }
 
     public TaskEntity getTask(String taskId) throws APIException {
-        return TaskEntity.fromJsonObject(api.tasksGet(taskId));
+        return (new Gson()).fromJson(api.tasksGet(taskId), TaskEntity.class);
     }
     
     public TaskEntity createTask(String codeName, Map<String, Object> params, Map<String, Object> options) throws APIException {
@@ -121,7 +127,7 @@ public class Client {
         JsonObject tasks = api.tasksCreate(codeName, (new Gson()).toJson(Params.create("token", api.getToken(), "project_id", api.getProjectId(), "params", params)), options);
         JsonObject task = tasks.get("tasks").getAsJsonArray().get(0).getAsJsonObject();
 
-        return TaskEntity.fromJsonObject(task);
+        return (new Gson()).fromJson(task, TaskEntity.class);
     }
 
     public TaskEntity createTask(String codeName, Map<String, Object> params, TaskOptionsObject options) throws APIException {

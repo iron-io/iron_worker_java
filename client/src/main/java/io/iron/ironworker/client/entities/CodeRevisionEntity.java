@@ -1,35 +1,28 @@
 package io.iron.ironworker.client.entities;
 
-import com.google.gson.JsonObject;
+import com.google.gson.annotations.SerializedName;
 
 import java.util.Date;
 
-public class CodeRevisionEntity extends BaseEntity {
+public class CodeRevisionEntity {
+    @SerializedName("id")
     String id;
-    String codeId;
+    @SerializedName("project_id")
     String projectId;
+    @SerializedName("code_id")
+    String codeId;
+    @SerializedName("name")
     String name;
+    @SerializedName("runtime")
     String runtime;
+    @SerializedName("file_name")
     String runner;
+    @SerializedName("rev")
     int revision;
+    @SerializedName("created_at")
     Date createdAt;
+    @SerializedName("updated_at")
     Date updatedAt;
-
-    public static CodeRevisionEntity fromJsonObject(JsonObject o) {
-        CodeRevisionEntity cr = new CodeRevisionEntity();
-
-        cr.id = parseString(o, "id");
-        cr.codeId = parseString(o, "code_id");
-        cr.projectId = parseString(o, "project_id");
-        cr.name = parseString(o, "name");
-        cr.runtime = parseString(o, "runtime");
-        cr.runner = parseString(o, "file_name");
-        cr.revision = parseInt(o, "rev");
-        cr.createdAt = parseDate(o, "created_at");
-        cr.updatedAt = parseDate(o, "updated_at");
-
-        return cr;
-    }
 
     protected CodeRevisionEntity() {
     }
@@ -38,12 +31,12 @@ public class CodeRevisionEntity extends BaseEntity {
         return id;
     }
 
-    public String getCodeId() {
-        return codeId;
-    }
-
     public String getProjectId() {
         return projectId;
+    }
+
+    public String getCodeId() {
+        return codeId;
     }
 
     public String getName() {
