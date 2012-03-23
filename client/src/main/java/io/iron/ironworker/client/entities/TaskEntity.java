@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.Date;
 
-public class TaskEntity extends {
+public class TaskEntity {
     @SerializedName("id")
     String id;
     @SerializedName("project_id")
