@@ -1,38 +1,31 @@
 package io.iron.ironworker.client.entities;
 
-import com.google.gson.JsonObject;
+import com.google.gson.annotations.SerializedName;
 
 import java.util.Date;
 
-public class CodeEntity extends BaseEntity {
+public class CodeEntity {
+    @SerializedName("id")
     String id;
+    @SerializedName("project_id")
     String projectId;
+    @SerializedName("name")
     String name;
+    @SerializedName("runtime")
     String runtime;
+    @SerializedName("rev")
     int revision;
+    @SerializedName("latest_history_id")
     String latestHistoryId;
+    @SerializedName("latest_checksum")
     String latestChecksum;
+    @SerializedName("latest_change")
     Date latestChange;
+    @SerializedName("created_at")
     Date createdAt;
+    @SerializedName("updated_at")
     Date updatedAt;
     
-    public static CodeEntity fromJsonObject(JsonObject o) {
-        CodeEntity c = new CodeEntity();
-
-        c.id = parseString(o, "id");
-        c.projectId = parseString(o, "project_id");
-        c.name = parseString(o, "name");
-        c.runtime = parseString(o, "runtime");
-        c.revision = parseInt(o, "rev");
-        c.latestHistoryId = parseString(o, "latest_history_id");
-        c.latestChecksum = parseString(o, "latest_checksum");
-        c.latestChange = parseDate(o, "latest_change");
-        c.createdAt = parseDate(o, "created_at");
-        c.updatedAt = parseDate(o, "updated_at");
-
-        return c;
-    }
-
     protected CodeEntity() {
     }
 

@@ -24,9 +24,8 @@ import org.apache.http.message.BasicNameValuePair;
 import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class APIClient {
     public static final String AWS_US_EAST_HOST = "worker-aws-us-east-1.iron.io";
@@ -40,6 +39,8 @@ public class APIClient {
     private String userAgent;
     private int maxRetries;
 
+    private Gson gson;
+
     public APIClient(String token, String projectId) {
         this.token = token;
         this.projectId = projectId;
@@ -49,6 +50,8 @@ public class APIClient {
         this.apiVersion = 2;
         this.userAgent = "iron_worker_java-1.0.0";
         maxRetries = 5;
+        
+        gson = new Gson();
     }
 
     public String getToken() {
@@ -288,7 +291,7 @@ public class APIClient {
             throw new APIException("File " + file + " not found", null);
         }
 
-        String data = (new Gson()).toJson(Params.create("name", name, "runtime", runtime, "file_name", runner));
+        String data = gson.toJson(Params.create("name", name, "runtime", runtime, "file_name", runner));
 
         return parseResponseAsJson(doFileRequest(String.format("projects/%s/codes", projectId), data, f));
     }
@@ -324,7 +327,7 @@ public class APIClient {
 
         tasks.add(task);
 
-        return parseResponseAsJson(doPostRequest(String.format("projects/%s/tasks", projectId), (new Gson()).toJson(Params.create("tasks", tasks))));
+        return parseResponseAsJson(doPostRequest(String.format("projects/%s/tasks", projectId), gson.toJson(Params.create("tasks", tasks))));
     }
 
     public JsonObject tasksCancel(String id) throws APIException {
@@ -340,7 +343,7 @@ public class APIClient {
     }
 
     public JsonObject tasksSetProgress(String id, Map<String, Object> options) throws APIException {
-        return parseResponseAsJson(doPostRequest(String.format("projects/%s/tasks/%s/progress", projectId, id), (new Gson()).toJson(options)));
+        return parseResponseAsJson(doPostRequest(String.format("projects/%s/tasks/%s/progress", projectId, id), gson.toJson(options)));
     }
 
     public JsonObject schedulesList(Map<String, Object> options) throws APIException {
@@ -355,6 +358,19 @@ public class APIClient {
         Map<String, Object> schedule = Params.create("code_name", code_name, "payload", payload);
 
         if (options != null) {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+            format.setTimeZone(TimeZone.getTimeZone("UTC"));
+
+            if (options.containsKey("start_at") && options.get("start_at").getClass() == Date.class) {
+                Date d = (Date) options.get("start_at");
+                options.put("start_at", format.format(d));
+            }
+
+            if (options.containsKey("end_at") && options.get("end_at").getClass() == Date.class) {
+                Date d = (Date) options.get("end_at");
+                options.put("end_at", format.format(d));
+            }
+
             schedule.putAll(options);
         }
 
@@ -362,7 +378,7 @@ public class APIClient {
 
         schedules.add(schedule);
 
-        return parseResponseAsJson(doPostRequest(String.format("projects/%s/schedules", projectId), (new Gson()).toJson(Params.create("schedules", schedules))));
+        return parseResponseAsJson(doPostRequest(String.format("projects/%s/schedules", projectId), gson.toJson(Params.create("schedules", schedules))));
     }
 
     public JsonObject schedulesCancel(String id) throws APIException {

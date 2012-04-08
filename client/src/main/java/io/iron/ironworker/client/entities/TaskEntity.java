@@ -1,47 +1,42 @@
 package io.iron.ironworker.client.entities;
 
-import com.google.gson.JsonObject;
+import com.google.gson.annotations.SerializedName;
 
 import java.util.Date;
 
-public class TaskEntity extends BaseEntity {
+public class TaskEntity {
+    @SerializedName("id")
     String id;
+    @SerializedName("project_id")
     String projectId;
+    @SerializedName("code_id")
     String codeId;
+    @SerializedName("code_name")
     String codeName;
-    String status;
-    Date startTime;
-    Date endTime;
-    int duration;
-    int runTimes;
+    @SerializedName("priority")
+    int priority;
+    @SerializedName("timeout")
     int timeout;
+    @SerializedName("status")
+    String status;
+    @SerializedName("start_time")
+    Date startTime;
+    @SerializedName("end_time")
+    Date endTime;
+    @SerializedName("duration")
+    int duration;
+    @SerializedName("run_times")
+    int runTimes;
+    @SerializedName("payload")
     String payload;
+    @SerializedName("percent")
     int percent;
+    @SerializedName("msg")
     String msg;
+    @SerializedName("created_at")
     Date createdAt;
+    @SerializedName("updated_at")
     Date updatedAt;
-
-    public static TaskEntity fromJsonObject(JsonObject o) {
-        TaskEntity t = new TaskEntity();
-
-        t.id = parseString(o, "id");
-        t.projectId = parseString(o, "project_id");
-        t.codeId = parseString(o, "code_id");
-        t.codeName = parseString(o, "code_name");
-        t.status = parseString(o, "status");
-        t.startTime = parseDate(o, "start_time");
-        t.endTime = parseDate(o, "end_time");
-        t.duration = parseInt(o, "duration");
-        t.runTimes = parseInt(o, "run_times");
-        t.timeout = parseInt(o, "timeout");
-        t.payload = parseString(o, "payload");
-        t.percent = parseInt(o, "percent");
-        t.msg = parseString(o, "msg");
-        t.createdAt = parseDate(o, "created_at");
-        t.updatedAt = parseDate(o, "updated_at");
-        
-        return t;
-    }
 
     protected TaskEntity() {
     }
@@ -62,6 +57,14 @@ public class TaskEntity extends BaseEntity {
         return codeName;
     }
 
+    public int getPriority() {
+        return priority;
+    }
+
+    public int getTimeout() {
+        return timeout;
+    }
+
     public String getStatus() {
         return status;
     }
@@ -80,10 +83,6 @@ public class TaskEntity extends BaseEntity {
 
     public int getRunTimes() {
         return runTimes;
-    }
-
-    public int getTimeout() {
-        return timeout;
     }
 
     public String getPayload() {
