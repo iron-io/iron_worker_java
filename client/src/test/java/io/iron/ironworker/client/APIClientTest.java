@@ -3,6 +3,9 @@ package io.iron.ironworker.client;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import io.iron.ironworker.client.builders.ParamsObject;
+import io.iron.ironworker.client.builders.ScheduleOptionsObject;
+import io.iron.ironworker.client.entities.ScheduleEntity;
 import org.apache.commons.io.IOUtils;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -11,6 +14,9 @@ import org.junit.Test;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Map;
 
 import static org.junit.Assert.*;
@@ -47,6 +53,19 @@ public class APIClientTest {
         assertNotNull(IRON_IO_PROJECT_ID + " environment variable not set", _ironProjectId);
         assertNotNull(IRON_IO_TOKEN + " environment variable not set", _ironToken);
     }
+
+    /*@Test
+    public void shouldCodesCreate() throws APIException, ParseException {
+        Client client = new Client("P7g9m72eTekPHd0bNCkCeBytrhQ", "4f63775f8de4561d19000804");
+        //params
+        ParamsObject paramsObject = new ParamsObject();
+        paramsObject.add("test", "http://");
+        //options
+        ScheduleOptionsObject scheduleOptionsObject = new ScheduleOptionsObject();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        scheduleOptionsObject.startAt(simpleDateFormat.parse("08/04/2012 23:45:00"));
+        ScheduleEntity entity = client.createSchedule("JavaHelloWorker", paramsObject, scheduleOptionsObject);
+    }*/
 
     @Test(expected = APIException.class)
     public void shouldConnexionFail() throws APIException {
@@ -107,11 +126,7 @@ public class APIClientTest {
         assertEquals("Deleted", deleteMessage.get("msg").getAsString());
     }
 
-    /**
-     * Check the validity of revision object.
-     *
-     * @param revision the json object that represent a revision
-     */
+
     private void checkCodeRevisionValidity(JsonObject revision) {
         assertNotNull(revision);
         assertNotNull(revision.get("id").getAsString());
@@ -123,12 +138,6 @@ public class APIClientTest {
         assertEquals(WORKER_FILE, revision.get("file_name").getAsString());
     }
 
-    /**
-     * Check the validity of code object.
-     *
-     * @param code the json object that represent a code package
-     * @return id of the code
-     */
     private String checkCodePackageValidity(JsonObject code) {
         assertNotNull(code);
         String id = code.get("id").getAsString();
@@ -138,13 +147,6 @@ public class APIClientTest {
         return id;
     }
 
-    /**
-     * Find a code by name.
-     *
-     * @param codes the list of available codes
-     * @param name  the name of the code to find
-     * @return the json object code or IllegalArgumentException
-     */
     private JsonObject fetchCodeFromName(JsonArray codes, String name) {
         for (JsonElement code : codes) {
             String codeName = code.getAsJsonObject().get("name").getAsString();
