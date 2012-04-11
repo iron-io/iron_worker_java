@@ -28,7 +28,7 @@ public class ScheduleEntity {
     @SerializedName("status")
     String status;
     @SerializedName("last_run_time")
-    long lastRunTime;
+    Date lastRunTime;
     @SerializedName("run_count")
     int runCount;
     @SerializedName("payload")
@@ -36,9 +36,9 @@ public class ScheduleEntity {
     @SerializedName("msg")
     String msg;
     @SerializedName("created_at")
-    long createdAt;
+    Date createdAt;
     @SerializedName("updated_at")
-    long updatedAt;
+    Date updatedAt;
 
     protected ScheduleEntity() {
     }
@@ -88,7 +88,7 @@ public class ScheduleEntity {
     }
 
     public Date getLastRunTime() {
-        return lastRunTime == 0 ? null : new Date(lastRunTime / 1000000);
+        return lastRunTime;
     }
 
     public int getRunCount() {
@@ -104,10 +104,10 @@ public class ScheduleEntity {
     }
 
     public Date getCreatedAt() {
-        return createdAt == 0 ? null : new Date(createdAt / 1000000);
+        return createdAt;
     }
 
     public Date getUpdatedAt() {
-        return updatedAt == 0 ? null : new Date(updatedAt / 1000000);
+        return updatedAt;
     }
 }

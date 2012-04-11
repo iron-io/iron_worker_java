@@ -18,7 +18,7 @@ import java.util.Map;
 public class Client {
     private APIClient api;
     private Gson gson;
-    
+
     public Client(String token, String projectId) {
         api = new APIClient(token, projectId);
         gson = new Gson();
@@ -27,10 +27,9 @@ public class Client {
     public APIClient getAPI() {
         return api;
     }
-    
+
     public List<CodeEntity> getCodes(Map<String, Object> options) throws APIException {
         JsonObject codes = api.codesList(options);
-        
         List<CodeEntity> codesList = new ArrayList<CodeEntity>();
 
         for (JsonElement code : codes.get("codes").getAsJsonArray()) {
@@ -51,7 +50,7 @@ public class Client {
     public CodeEntity getCode(String codeId) throws APIException {
         return gson.fromJson(api.codesGet(codeId), CodeEntity.class);
     }
-    
+
     public void createCode(BaseCode code) throws APIException {
         api.codesCreate(code.getName(), code.getFile(), code.getRuntime(), code.getRunner());
     }
@@ -115,12 +114,12 @@ public class Client {
     public TaskEntity getTask(String taskId) throws APIException {
         return gson.fromJson(api.tasksGet(taskId), TaskEntity.class);
     }
-    
+
     public TaskEntity createTask(String codeName, Map<String, Object> params, Map<String, Object> options) throws APIException {
         if (params == null) {
             params = new HashMap<String, Object>();
         }
-        
+
         JsonObject tasks = api.tasksCreate(codeName, gson.toJson(Params.create("token", api.getToken(), "project_id", api.getProjectId(), "params", params)), options);
         JsonObject task = tasks.get("tasks").getAsJsonArray().get(0).getAsJsonObject();
 
@@ -150,7 +149,7 @@ public class Client {
     public TaskEntity createTask(String codeName) throws APIException {
         return createTask(codeName, (Map<String, Object>) null, (Map<String, Object>) null);
     }
-    
+
     public void cancelTask(String taskId) throws APIException {
         api.tasksCancel(taskId);
     }
@@ -158,11 +157,11 @@ public class Client {
     public void cancelAllTasks(String codeId) throws APIException {
         api.tasksCancelAll(codeId);
     }
-    
+
     public String getTaskLog(String taskId) throws APIException {
         return api.tasksLog(taskId);
     }
-    
+
     public void setTaskProgress(String taskId, Map<String, Object> options) throws APIException {
         api.tasksSetProgress(taskId, options);
     }
