@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.Date;
 
-public class TaskEntity {
+public class TaskEntity extends BaseEntity {
     @SerializedName("id")
     String id;
     @SerializedName("project_id")
@@ -20,9 +20,9 @@ public class TaskEntity {
     @SerializedName("status")
     String status;
     @SerializedName("start_time")
-    Date startTime;
+    String startTime;
     @SerializedName("end_time")
-    Date endTime;
+    String endTime;
     @SerializedName("duration")
     int duration;
     @SerializedName("run_times")
@@ -34,9 +34,9 @@ public class TaskEntity {
     @SerializedName("msg")
     String msg;
     @SerializedName("created_at")
-    Date createdAt;
+    String createdAt;
     @SerializedName("updated_at")
-    Date updatedAt;
+    String updatedAt;
 
     protected TaskEntity() {
     }
@@ -70,11 +70,11 @@ public class TaskEntity {
     }
 
     public Date getStartTime() {
-        return startTime;
+        return parseDate(startTime);
     }
 
     public Date getEndTime() {
-        return endTime;
+        return parseDate(endTime);
     }
 
     public int getDuration() {
@@ -98,10 +98,10 @@ public class TaskEntity {
     }
 
     public Date getCreatedAt() {
-        return createdAt;
+        return parseDate(createdAt);
     }
 
     public Date getUpdatedAt() {
-        return updatedAt;
+        return parseDate(updatedAt);
     }
 }

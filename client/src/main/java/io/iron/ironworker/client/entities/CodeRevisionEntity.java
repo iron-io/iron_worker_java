@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.Date;
 
-public class CodeRevisionEntity {
+public class CodeRevisionEntity extends BaseEntity {
     @SerializedName("id")
     String id;
     @SerializedName("project_id")
@@ -20,9 +20,9 @@ public class CodeRevisionEntity {
     @SerializedName("rev")
     int revision;
     @SerializedName("created_at")
-    Date createdAt;
+    String createdAt;
     @SerializedName("updated_at")
-    Date updatedAt;
+    String updatedAt;
 
     protected CodeRevisionEntity() {
     }
@@ -56,10 +56,10 @@ public class CodeRevisionEntity {
     }
 
     public Date getCreatedAt() {
-        return createdAt;
+        return parseDate(createdAt);
     }
 
     public Date getUpdatedAt() {
-        return updatedAt;
+        return parseDate(updatedAt);
     }
 }

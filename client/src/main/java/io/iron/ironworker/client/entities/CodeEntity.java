@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.Date;
 
-public class CodeEntity {
+public class CodeEntity extends BaseEntity {
     @SerializedName("id")
     String id;
     @SerializedName("project_id")
@@ -20,11 +20,11 @@ public class CodeEntity {
     @SerializedName("latest_checksum")
     String latestChecksum;
     @SerializedName("latest_change")
-    Date latestChange;
+    String latestChange;
     @SerializedName("created_at")
-    Date createdAt;
+    String createdAt;
     @SerializedName("updated_at")
-    Date updatedAt;
+    String updatedAt;
     
     protected CodeEntity() {
     }
@@ -58,14 +58,14 @@ public class CodeEntity {
     }
 
     public Date getLatestChange() {
-        return latestChange;
+        return parseDate(latestChange);
     }
 
     public Date getCreatedAt() {
-        return createdAt;
+        return parseDate(createdAt);
     }
 
     public Date getUpdatedAt() {
-        return updatedAt;
+        return parseDate(updatedAt);
     }
 }

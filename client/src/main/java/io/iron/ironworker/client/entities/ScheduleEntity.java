@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.Date;
 
-public class ScheduleEntity {
+public class ScheduleEntity extends BaseEntity {
     @SerializedName("id")
     String id;
     @SerializedName("project_id")
@@ -14,9 +14,9 @@ public class ScheduleEntity {
     @SerializedName("priority")
     int priority;
     @SerializedName("start_at")
-    Date startAt;
+    String startAt;
     @SerializedName("end_at")
-    Date endAt;
+    String endAt;
     @SerializedName("delay")
     int delay;
     @SerializedName("run_every")
@@ -24,11 +24,11 @@ public class ScheduleEntity {
     @SerializedName("run_times")
     int runTimes;
     @SerializedName("next_start")
-    Date nextStart;
+    String nextStart;
     @SerializedName("status")
     String status;
     @SerializedName("last_run_time")
-    Date lastRunTime;
+    String lastRunTime;
     @SerializedName("run_count")
     int runCount;
     @SerializedName("payload")
@@ -36,9 +36,9 @@ public class ScheduleEntity {
     @SerializedName("msg")
     String msg;
     @SerializedName("created_at")
-    Date createdAt;
+    String createdAt;
     @SerializedName("updated_at")
-    Date updatedAt;
+    String updatedAt;
 
     protected ScheduleEntity() {
     }
@@ -60,11 +60,11 @@ public class ScheduleEntity {
     }
 
     public Date getStartAt() {
-        return startAt;
+        return parseDate(startAt);
     }
 
     public Date getEndAt() {
-        return endAt;
+        return parseDate(endAt);
     }
 
     public int getDelay() {
@@ -80,7 +80,7 @@ public class ScheduleEntity {
     }
 
     public Date getNextStart() {
-        return nextStart;
+        return parseDate(nextStart);
     }
 
     public String getStatus() {
@@ -88,7 +88,7 @@ public class ScheduleEntity {
     }
 
     public Date getLastRunTime() {
-        return lastRunTime;
+        return parseDate(lastRunTime);
     }
 
     public int getRunCount() {
@@ -104,10 +104,10 @@ public class ScheduleEntity {
     }
 
     public Date getCreatedAt() {
-        return createdAt;
+        return parseDate(createdAt);
     }
 
     public Date getUpdatedAt() {
-        return updatedAt;
+        return parseDate(updatedAt);
     }
 }
