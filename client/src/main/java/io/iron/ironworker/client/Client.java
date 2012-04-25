@@ -121,7 +121,7 @@ public class Client {
             params = new HashMap<String, Object>();
         }
         
-        JsonObject tasks = api.tasksCreate(codeName, gson.toJson(Params.create("token", api.getToken(), "project_id", api.getProjectId(), "params", params)), options);
+        JsonObject tasks = api.tasksCreate(codeName, gson.toJson(params), options);
         JsonObject task = tasks.get("tasks").getAsJsonArray().get(0).getAsJsonObject();
 
         return gson.fromJson(task, TaskEntity.class);
@@ -204,7 +204,7 @@ public class Client {
             params = new HashMap<String, Object>();
         }
 
-        JsonObject schedules = api.schedulesCreate(codeName, gson.toJson(Params.create("token", api.getToken(), "project_id", api.getProjectId(), "params", params)), options);
+        JsonObject schedules = api.schedulesCreate(codeName, gson.toJson(params), options);
         JsonObject schedule = schedules.get("schedules").getAsJsonArray().get(0).getAsJsonObject();
 
         return gson.fromJson(schedule, ScheduleEntity.class);

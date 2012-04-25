@@ -16,20 +16,25 @@ Client client = new Client("IRON_IO_TOKEN", "IRON_IO_PROJECT_ID");
 
 ## Create Code Package
 
-This isn't implemented in this library yet, so you need to create zip which will contain all jars you need and runner.rb which will simply run java executable.
+This isn't implemented in this library yet, so you need to create zip which will contain all jars you need and __runner__.sh which will simply run java executable.
 
-```ruby
-root = nil
+```sh
+root() {
+  while [ $# -gt 0 ]; do
+    if [ "$1" = "-d" ]; then
+      printf "%s\n" "$2"
+      break
+    fi
+  done
+}
 
-($*.length - 2).downto(0) do |i|
-  root = $*[i + 1] if $*[i] == '-d'
-end
+cd "$(root "$@")"
 
-Dir.chdir(root)
-
-puts `java -jar MyWorker.jar -cp Xerces.jar`
+java -cp xerces.jar -jar worker.jar "$@"
 
 ```
+
+You can also use https://github.com/iron-io/iron_worker_ruby_ng/ to create and upload code package.
 
 ## Upload Code Package
 
