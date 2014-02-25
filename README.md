@@ -70,7 +70,7 @@ client.createTask("MyWorker", Params.create("param", 13, "another", "value"));
 You can specify priority of the task by setting the corresponding parameter of Client.createTask method.
 
 ```java
-# Run task with highest priority
+// Run the task with highest priority
 TaskEntity t = client.createTask("MyWorker", params, TaskOptions.priority(2));
 ```
 
