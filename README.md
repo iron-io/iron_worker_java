@@ -1,3 +1,30 @@
+Getting Started
+===============
+
+There are three ways to get this package.
+
+1. Add it as a Maven dependency
+   Your pom.xml will look something like:
+
+```xml
+    <dependencies>
+        <dependency>
+            <groupId>io.iron.ironworker</groupId>
+            <artifactId>ironworker</artifactId>
+            <version>1.0.2</version>
+        </dependency>
+    </dependencies>
+```
+
+2. [Download the jar from Maven Repo](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.iron.ironworker%22).
+
+3. Build from source with [Apache Buildr](http://buildr.apache.org):
+
+    buildr package
+
+The .jar file will appear under the target directory.
+
+
 # Basic Usage
 
 Visit http://iron.io for more details.
