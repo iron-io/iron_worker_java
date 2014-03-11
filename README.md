@@ -92,6 +92,17 @@ TaskEntity t = client.createTask("MyWorker",
 client.createTask("MyWorker", Params.create("param", 13, "another", "value"));
 ```
 
+### Setting Task Priority
+
+You can specify priority of the task by setting the corresponding parameter of Client.createTask method.
+
+```java
+// Run the task with highest priority
+TaskEntity t = client.createTask("MyWorker", params, TaskOptions.priority(2));
+```
+
+Value of parameter means the priority queue to run the task in. Valid values are 0, 1, and 2. 0 is the default.
+
 ## Get Results
 
 At the moment entities just hold data, you need to call client yourself.
