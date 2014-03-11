@@ -346,6 +346,12 @@ public class APIClient {
         return parseResponseAsJson(doPostRequest(String.format("projects/%s/tasks/%s/progress", projectId, id), gson.toJson(options)));
     }
 
+    public JsonObject retryTask(String id, int delay) throws APIException {
+        Map<String, Integer> options = new HashMap<String, Integer>();
+        options.put("delay", delay);
+        return parseResponseAsJson(doPostRequest(String.format("projects/%s/tasks/%s/retry", projectId, id), gson.toJson(options)));
+    }
+
     public JsonObject schedulesList(Map<String, Object> options) throws APIException {
         return parseResponseAsJson(doGetRequest(String.format("projects/%s/schedules", projectId), options));
     }

@@ -175,6 +175,12 @@ public class Client {
         setTaskProgress(taskId, (Map<String, Object>) null);
     }
 
+    public String retryTask(String taskId, int delay) throws APIException {
+        JsonObject retryTask = api.retryTask(taskId, delay);
+        JsonObject task = retryTask.get("tasks").getAsJsonArray().get(0).getAsJsonObject();
+        return task.get("id").getAsString();
+    }
+
     public List<ScheduleEntity> getSchedules(Map<String, Object> options) throws APIException {
         JsonObject schedules = api.schedulesList(options);
 
