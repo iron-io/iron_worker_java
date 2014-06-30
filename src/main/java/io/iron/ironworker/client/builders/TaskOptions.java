@@ -9,6 +9,10 @@ public class TaskOptions {
         return (new TaskOptionsObject()).timeout(timeout);
     }
 
+    public static TaskOptionsObject cluster(String cluster) {
+        return (new TaskOptionsObject()).cluster(cluster);
+    }
+
     public static TaskOptionsObject delay(int delay) {
         return (new TaskOptionsObject()).delay(delay);
     }
