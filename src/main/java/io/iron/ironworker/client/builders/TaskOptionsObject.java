@@ -22,6 +22,12 @@ public class TaskOptionsObject {
         return this;
     }
 
+    public TaskOptionsObject cluster(String cluster) {
+        options.put("cluster", cluster);
+
+        return this;
+    }
+
     public TaskOptionsObject delay(int delay) {
         options.put("delay", delay);
 
