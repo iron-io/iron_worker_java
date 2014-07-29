@@ -101,7 +101,27 @@ You can specify priority of the task by setting the corresponding parameter of C
 TaskEntity t = client.createTask("MyWorker", params, TaskOptions.priority(2));
 ```
 
-Value of parameter means the priority queue to run the task in. Valid values are 0, 1, and 2. 0 is the default.
+There are 3 possible Options which could be set using TaskOptions:
+
+  - **priority**: Setting the priority of your job. Valid values are 0, 1, and 2. The default is 0.
+  - **timeout**: The maximum runtime of your task in seconds. No task can exceed 3600 seconds (60 minutes). The default is 3600 but can be set to a shorter duration.
+  - **delay**: The number of seconds to delay before actually queuing the task. Default is 0.
+
+## Schedule Task
+
+```java
+ScheduleEntity s = client.createSchedule("MyWorker",
+        Params.add("param", 13).add("another", "value"),
+        ScheduleOptions.delay(10));
+```
+
+There are several possible options which could be set using ScheduleOptions:
+
+  - **runEvery**: The amount of time, in seconds, between runs. By default, the task will only run once. run_every will return a 400 error if it is set to less than 60.
+  - **endAt**: The time tasks will stop being queued. Should be an instance of Date.
+  - **runTimes**: The number of times a task will run.
+  - **priority**: Setting the priority of your job. Valid values are 0, 1, and 2. The default is 0. Higher values means tasks spend less time in the queue once they come off the schedule.
+  - **startAt**: The time the scheduled task should first be run. Should be an instance of Date.
 
 ## Get Results
 
