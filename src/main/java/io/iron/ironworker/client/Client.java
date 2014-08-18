@@ -5,10 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import io.iron.ironworker.client.builders.*;
 import io.iron.ironworker.client.codes.BaseCode;
-import io.iron.ironworker.client.entities.CodeEntity;
-import io.iron.ironworker.client.entities.CodeRevisionEntity;
-import io.iron.ironworker.client.entities.ScheduleEntity;
-import io.iron.ironworker.client.entities.TaskEntity;
+import io.iron.ironworker.client.entities.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,7 +15,7 @@ import java.util.Map;
 public class Client {
     private APIClient api;
     private Gson gson;
-    
+
     public Client(String token, String projectId) {
         api = new APIClient(token, projectId);
         gson = new Gson();
@@ -27,10 +24,10 @@ public class Client {
     public APIClient getAPI() {
         return api;
     }
-    
+
     public List<CodeEntity> getCodes(Map<String, Object> options) throws APIException {
         JsonObject codes = api.codesList(options);
-        
+
         List<CodeEntity> codesList = new ArrayList<CodeEntity>();
 
         for (JsonElement code : codes.get("codes").getAsJsonArray()) {
@@ -51,7 +48,7 @@ public class Client {
     public CodeEntity getCode(String codeId) throws APIException {
         return gson.fromJson(api.codesGet(codeId), CodeEntity.class);
     }
-    
+
     public void createCode(BaseCode code) throws APIException {
         api.codesCreate(code.getName(), code.getFile(), code.getRuntime(), code.getRunner());
     }
@@ -115,42 +112,40 @@ public class Client {
     public TaskEntity getTask(String taskId) throws APIException {
         return gson.fromJson(api.tasksGet(taskId), TaskEntity.class);
     }
-    
-    public TaskEntity createTask(String codeName, Map<String, Object> params, Map<String, Object> options) throws APIException {
+
+    public String createTask(String codeName, Map<String, Object> params, Map<String, Object> options) throws APIException {
         if (params == null) {
             params = new HashMap<String, Object>();
         }
-        
-        JsonObject tasks = api.tasksCreate(codeName, gson.toJson(params), options);
-        JsonObject task = tasks.get("tasks").getAsJsonArray().get(0).getAsJsonObject();
 
-        return gson.fromJson(task, TaskEntity.class);
+        // TODO: implement multiple worker queueing (http://dev.iron.io/worker/reference/api/#queue_a_task)
+        return gson.fromJson(api.tasksCreate(codeName, gson.toJson(params), options), TaskIds.class).getIds()[0];
     }
 
-    public TaskEntity createTask(String codeName, Map<String, Object> params, TaskOptionsObject options) throws APIException {
+    public String createTask(String codeName, Map<String, Object> params, TaskOptionsObject options) throws APIException {
         return createTask(codeName, params, options.create());
     }
 
-    public TaskEntity createTask(String codeName, ParamsObject params, Map<String, Object> options) throws APIException {
+    public String createTask(String codeName, ParamsObject params, Map<String, Object> options) throws APIException {
         return createTask(codeName, params.create(), options);
     }
 
-    public TaskEntity createTask(String codeName, ParamsObject params, TaskOptionsObject options) throws APIException {
+    public String createTask(String codeName, ParamsObject params, TaskOptionsObject options) throws APIException {
         return createTask(codeName, params.create(), options.create());
     }
 
-    public TaskEntity createTask(String codeName, Map<String, Object> params) throws APIException {
+    public String createTask(String codeName, Map<String, Object> params) throws APIException {
         return createTask(codeName, params, (Map<String, Object>) null);
     }
 
-    public TaskEntity createTask(String codeName, ParamsObject params) throws APIException {
+    public String createTask(String codeName, ParamsObject params) throws APIException {
         return createTask(codeName, params.create(), (Map<String, Object>) null);
     }
 
-    public TaskEntity createTask(String codeName) throws APIException {
+    public String createTask(String codeName) throws APIException {
         return createTask(codeName, (Map<String, Object>) null, (Map<String, Object>) null);
     }
-    
+
     public void cancelTask(String taskId) throws APIException {
         api.tasksCancel(taskId);
     }
@@ -158,11 +153,11 @@ public class Client {
     public void cancelAllTasks(String codeId) throws APIException {
         api.tasksCancelAll(codeId);
     }
-    
+
     public String getTaskLog(String taskId) throws APIException {
         return api.tasksLog(taskId);
     }
-    
+
     public void setTaskProgress(String taskId, Map<String, Object> options) throws APIException {
         api.tasksSetProgress(taskId, options);
     }
@@ -173,12 +168,6 @@ public class Client {
 
     public void setTaskProgress(String taskId) throws APIException {
         setTaskProgress(taskId, (Map<String, Object>) null);
-    }
-
-    public String retryTask(String taskId, int delay) throws APIException {
-        JsonObject retryTask = api.retryTask(taskId, delay);
-        JsonObject task = retryTask.get("tasks").getAsJsonArray().get(0).getAsJsonObject();
-        return task.get("id").getAsString();
     }
 
     public List<ScheduleEntity> getSchedules(Map<String, Object> options) throws APIException {
