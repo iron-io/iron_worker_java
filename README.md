@@ -110,7 +110,7 @@ There are 3 possible Options which could be set using TaskOptions:
 ## Schedule Task
 
 ```java
-ScheduleEntity s = client.createSchedule("MyWorker",
+String id = client.createSchedule("MyWorker",
         Params.add("param", 13).add("another", "value"),
         ScheduleOptions.delay(10));
 ```

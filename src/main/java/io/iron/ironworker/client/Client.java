@@ -200,38 +200,36 @@ public class Client {
         return gson.fromJson(api.schedulesGet(scheduleId), ScheduleEntity.class);
     }
 
-    public ScheduleEntity createSchedule(String codeName, Map<String, Object> params, Map<String, Object> options) throws APIException {
+    public String createSchedule(String codeName, Map<String, Object> params, Map<String, Object> options) throws APIException {
         if (params == null) {
             params = new HashMap<String, Object>();
         }
 
-        JsonObject schedules = api.schedulesCreate(codeName, gson.toJson(params), options);
-        JsonObject schedule = schedules.get("schedules").getAsJsonArray().get(0).getAsJsonObject();
-
-        return gson.fromJson(schedule, ScheduleEntity.class);
+        // TODO: implement multiple worker scheduling (http://dev.iron.io/worker/reference/api/#schedule_a_task)
+        return gson.fromJson(api.schedulesCreate(codeName, gson.toJson(params), options), ScheduleIds.class).getIds()[0];
     }
 
-    public ScheduleEntity createSchedule(String codeName, Map<String, Object> params, ScheduleOptionsObject options) throws APIException {
+    public String createSchedule(String codeName, Map<String, Object> params, ScheduleOptionsObject options) throws APIException {
         return createSchedule(codeName, params, options.create());
     }
 
-    public ScheduleEntity createSchedule(String codeName, ParamsObject params, Map<String, Object> options) throws APIException {
+    public String createSchedule(String codeName, ParamsObject params, Map<String, Object> options) throws APIException {
         return createSchedule(codeName, params.create(), options);
     }
 
-    public ScheduleEntity createSchedule(String codeName, ParamsObject params, ScheduleOptionsObject options) throws APIException {
+    public String createSchedule(String codeName, ParamsObject params, ScheduleOptionsObject options) throws APIException {
         return createSchedule(codeName, params.create(), options.create());
     }
 
-    public ScheduleEntity createSchedule(String codeName, Map<String, Object> params) throws APIException {
+    public String createSchedule(String codeName, Map<String, Object> params) throws APIException {
         return createSchedule(codeName, params, (Map<String, Object>) null);
     }
 
-    public ScheduleEntity createSchedule(String codeName, ParamsObject params) throws APIException {
+    public String createSchedule(String codeName, ParamsObject params) throws APIException {
         return createSchedule(codeName, params.create(), (Map<String, Object>) null);
     }
 
-    public ScheduleEntity createSchedule(String codeName) throws APIException {
+    public String createSchedule(String codeName) throws APIException {
         return createSchedule(codeName, (Map<String, Object>) null, (Map<String, Object>) null);
     }
 
