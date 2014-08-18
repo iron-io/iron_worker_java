@@ -48,7 +48,7 @@ public class IronWorkerTest {
 
     @Test
     public void testSchedulingInfo() throws IOException, APIException, InterruptedException {
-        String id = client.createTask("HelloWorkerMono");
+        String id = client.createSchedule("HelloWorkerMono");
         Thread.sleep(1000);
         ScheduleEntity schedule = client.getSchedule(id);
 
