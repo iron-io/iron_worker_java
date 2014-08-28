@@ -10,4 +10,8 @@ public class ScheduleIds {
         }
         return result;
     }
+
+    public ScheduleEntity[] getSchedules() {
+        return schedules;
+    }
 }

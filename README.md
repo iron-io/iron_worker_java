@@ -84,7 +84,7 @@ import io.iron.ironworker.client.builders.Params;
 import io.iron.ironworker.client.builders.TaskOptions;
 
 // specififying some options
-String taskId = client.createTask("MyWorker",
+TaskEntity t = client.createTask("MyWorker",
         Params.add("param", 13).add("another", "value"),
         TaskOptions.priority(1).delay(60));
 
@@ -110,7 +110,7 @@ There are 3 possible Options which could be set using TaskOptions:
 ## Schedule Task
 
 ```java
-String id = client.createSchedule("MyWorker",
+ScheduleEntity s = client.createSchedule("MyWorker",
         Params.add("param", 13).add("another", "value"),
         ScheduleOptions.delay(10));
 ```

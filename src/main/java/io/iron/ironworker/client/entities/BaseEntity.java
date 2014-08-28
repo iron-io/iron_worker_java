@@ -1,5 +1,6 @@
 package io.iron.ironworker.client.entities;
 
+import java.lang.reflect.Field;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -20,5 +21,16 @@ public class BaseEntity {
         }
 
         return null;
+    }
+
+    public void copyFields(BaseEntity entity) throws IllegalAccessException, NoSuchFieldException {
+        for (Field field : entity.getClass().getDeclaredFields()) {
+            field.setAccessible(true);
+            Object value = field.get(entity);
+            if (value != null) {
+                field.setAccessible(true);
+                field.set(this, value);
+            }
+        }
     }
 }

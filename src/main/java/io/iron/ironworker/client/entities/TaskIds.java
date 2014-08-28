@@ -10,4 +10,8 @@ public class TaskIds {
         }
         return result;
     }
+
+    public TaskEntity[] getTasks() {
+        return tasks;
+    }
 }

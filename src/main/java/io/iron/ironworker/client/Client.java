@@ -113,36 +113,37 @@ public class Client {
         return gson.fromJson(api.tasksGet(taskId), TaskEntity.class);
     }
 
-    public String createTask(String codeName, Map<String, Object> params, Map<String, Object> options) throws APIException {
+    public TaskEntity createTask(String codeName, Map<String, Object> params, Map<String, Object> options) throws APIException {
         if (params == null) {
             params = new HashMap<String, Object>();
         }
 
         // TODO: implement multiple worker queueing (http://dev.iron.io/worker/reference/api/#queue_a_task)
-        return gson.fromJson(api.tasksCreate(codeName, gson.toJson(params), options), TaskIds.class).getIds()[0];
+        TaskIds taskIds = gson.fromJson(api.tasksCreate(codeName, gson.toJson(params), options), TaskIds.class);
+        return taskIds.getTasks()[0];
     }
 
-    public String createTask(String codeName, Map<String, Object> params, TaskOptionsObject options) throws APIException {
+    public TaskEntity createTask(String codeName, Map<String, Object> params, TaskOptionsObject options) throws APIException {
         return createTask(codeName, params, options.create());
     }
 
-    public String createTask(String codeName, ParamsObject params, Map<String, Object> options) throws APIException {
+    public TaskEntity createTask(String codeName, ParamsObject params, Map<String, Object> options) throws APIException {
         return createTask(codeName, params.create(), options);
     }
 
-    public String createTask(String codeName, ParamsObject params, TaskOptionsObject options) throws APIException {
+    public TaskEntity createTask(String codeName, ParamsObject params, TaskOptionsObject options) throws APIException {
         return createTask(codeName, params.create(), options.create());
     }
 
-    public String createTask(String codeName, Map<String, Object> params) throws APIException {
+    public TaskEntity createTask(String codeName, Map<String, Object> params) throws APIException {
         return createTask(codeName, params, (Map<String, Object>) null);
     }
 
-    public String createTask(String codeName, ParamsObject params) throws APIException {
+    public TaskEntity createTask(String codeName, ParamsObject params) throws APIException {
         return createTask(codeName, params.create(), (Map<String, Object>) null);
     }
 
-    public String createTask(String codeName) throws APIException {
+    public TaskEntity createTask(String codeName) throws APIException {
         return createTask(codeName, (Map<String, Object>) null, (Map<String, Object>) null);
     }
 
@@ -200,40 +201,63 @@ public class Client {
         return gson.fromJson(api.schedulesGet(scheduleId), ScheduleEntity.class);
     }
 
-    public String createSchedule(String codeName, Map<String, Object> params, Map<String, Object> options) throws APIException {
+    public ScheduleEntity createSchedule(String codeName, Map<String, Object> params, Map<String, Object> options) throws APIException {
         if (params == null) {
             params = new HashMap<String, Object>();
         }
 
         // TODO: implement multiple worker scheduling (http://dev.iron.io/worker/reference/api/#schedule_a_task)
-        return gson.fromJson(api.schedulesCreate(codeName, gson.toJson(params), options), ScheduleIds.class).getIds()[0];
+        ScheduleIds scheduleIds = gson.fromJson(api.schedulesCreate(codeName, gson.toJson(params), options), ScheduleIds.class);
+        return scheduleIds.getSchedules()[0];
     }
 
-    public String createSchedule(String codeName, Map<String, Object> params, ScheduleOptionsObject options) throws APIException {
+    public ScheduleEntity createSchedule(String codeName, Map<String, Object> params, ScheduleOptionsObject options) throws APIException {
         return createSchedule(codeName, params, options.create());
     }
 
-    public String createSchedule(String codeName, ParamsObject params, Map<String, Object> options) throws APIException {
+    public ScheduleEntity createSchedule(String codeName, ParamsObject params, Map<String, Object> options) throws APIException {
         return createSchedule(codeName, params.create(), options);
     }
 
-    public String createSchedule(String codeName, ParamsObject params, ScheduleOptionsObject options) throws APIException {
+    public ScheduleEntity createSchedule(String codeName, ParamsObject params, ScheduleOptionsObject options) throws APIException {
         return createSchedule(codeName, params.create(), options.create());
     }
 
-    public String createSchedule(String codeName, Map<String, Object> params) throws APIException {
+    public ScheduleEntity createSchedule(String codeName, Map<String, Object> params) throws APIException {
         return createSchedule(codeName, params, (Map<String, Object>) null);
     }
 
-    public String createSchedule(String codeName, ParamsObject params) throws APIException {
+    public ScheduleEntity createSchedule(String codeName, ParamsObject params) throws APIException {
         return createSchedule(codeName, params.create(), (Map<String, Object>) null);
     }
 
-    public String createSchedule(String codeName) throws APIException {
+    public ScheduleEntity createSchedule(String codeName) throws APIException {
         return createSchedule(codeName, (Map<String, Object>) null, (Map<String, Object>) null);
     }
 
     public void cancelSchedule(String scheduleId) throws APIException {
         api.schedulesCancel(scheduleId);
+    }
+
+    public void reload(TaskEntity entity) throws APIException {
+        TaskEntity reloaded = this.getTask(entity.getId());
+        try {
+            entity.copyFields(reloaded);
+        } catch (IllegalAccessException e) {
+            throw new APIException("Impossible to update field.", e);
+        } catch (NoSuchFieldException e) {
+            throw new APIException("Impossible to update field: No such field.", e);
+        }
+    }
+
+    public void reload(ScheduleEntity entity) throws APIException {
+        ScheduleEntity reloaded = this.getSchedule(entity.getId());
+        try {
+            entity.copyFields(reloaded);
+        } catch (IllegalAccessException e) {
+            throw new APIException("Impossible to update field.", e);
+        } catch (NoSuchFieldException e) {
+            throw new APIException("Impossible to update field: No such field.", e);
+        }
     }
 }
