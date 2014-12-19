@@ -27,6 +27,14 @@ public class ScheduleOptions {
         return (new ScheduleOptionsObject()).runTimes(runTimes);
     }
 
+    public static ScheduleOptionsObject cluster(String cluster) {
+        return (new ScheduleOptionsObject()).cluster(cluster);
+    }
+
+    public static ScheduleOptionsObject label(String label) {
+        return (new ScheduleOptionsObject()).label(label);
+    }
+
     protected ScheduleOptions() {
     }
 }
