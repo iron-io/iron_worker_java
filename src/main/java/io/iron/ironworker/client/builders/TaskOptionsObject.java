@@ -28,6 +28,12 @@ public class TaskOptionsObject {
         return this;
     }
 
+    public TaskOptionsObject label(String label) {
+        options.put("label", label);
+
+        return this;
+    }
+
     public TaskOptionsObject delay(int delay) {
         options.put("delay", delay);
 

@@ -106,6 +106,8 @@ There are 3 possible Options which could be set using TaskOptions:
   - **priority**: Setting the priority of your job. Valid values are 0, 1, and 2. The default is 0.
   - **timeout**: The maximum runtime of your task in seconds. No task can exceed 3600 seconds (60 minutes). The default is 3600 but can be set to a shorter duration.
   - **delay**: The number of seconds to delay before actually queuing the task. Default is 0.
+  - **label**: Optional text label for your task.
+  - **cluster**: cluster name ex: "high-mem" or "dedicated".  This is a premium feature for customers to have access to more powerful or custom built worker solutions. Dedicated worker clusters exist for users who want to reserve a set number of workers just for their queued tasks. If not set default is set to  "default" which is the public IronWorker cluster.
 
 ## Schedule Task
 
@@ -122,6 +124,8 @@ There are several possible options which could be set using ScheduleOptions:
   - **runTimes**: The number of times a task will run.
   - **priority**: Setting the priority of your job. Valid values are 0, 1, and 2. The default is 0. Higher values means tasks spend less time in the queue once they come off the schedule.
   - **startAt**: The time the scheduled task should first be run. Should be an instance of Date.
+  - **label**: Optional label for adding custom labels to scheduled tasks.
+  - **cluster**: cluster name ex: "high-mem" or "dedicated". If not set default is set to "default" which is the public IronWorker cluster.
 
 ## Get Results
 
