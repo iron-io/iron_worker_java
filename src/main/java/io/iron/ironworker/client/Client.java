@@ -9,6 +9,7 @@ import io.iron.ironworker.client.entities.CodeEntity;
 import io.iron.ironworker.client.entities.CodeRevisionEntity;
 import io.iron.ironworker.client.entities.ScheduleEntity;
 import io.iron.ironworker.client.entities.TaskEntity;
+import org.apache.http.HttpHost;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,6 +22,11 @@ public class Client {
     
     public Client(String token, String projectId) {
         api = new APIClient(token, projectId);
+        gson = new Gson();
+    }
+
+    public Client(String token, String projectId, HttpHost httpProxy) {
+        api = new APIClient(token, projectId, httpProxy);
         gson = new Gson();
     }
 

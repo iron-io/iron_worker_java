@@ -41,6 +41,17 @@ import io.iron.ironworker.client.Client;
 Client client = new Client("IRON_IO_TOKEN", "IRON_IO_PROJECT_ID");
 ```
 
+### Set proxy
+If you need to set up the proxy, create the `client` object as follows:
+```java
+import org.apache.http.HttpHost;
+import io.iron.ironworker.client.Client;
+
+HttpHost httpProxy = new HttpHost(hostname, port, scheme);
+Client client = new Client("IRON_IO_TOKEN", "IRON_IO_PROJECT_ID", httpProxy);
+
+```
+
 ## Create Code Package
 
 This isn't implemented in this library yet, so you need to create zip which will contain all jars you need and __runner__.sh which will simply run java executable.
