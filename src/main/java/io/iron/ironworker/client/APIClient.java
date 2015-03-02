@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import io.iron.ironworker.client.builders.Params;
 import org.apache.commons.io.IOUtils;
+import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
@@ -14,6 +15,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.utils.URIUtils;
 import org.apache.http.client.utils.URLEncodedUtils;
+import org.apache.http.conn.params.ConnRoutePNames;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.FileBody;
@@ -38,6 +40,7 @@ public class APIClient {
     private int apiVersion;
     private String userAgent;
     private int maxRetries;
+    private HttpHost httpProxy;
 
     private Gson gson;
 
@@ -52,6 +55,11 @@ public class APIClient {
         maxRetries = 5;
         
         gson = new Gson();
+    }
+
+    public APIClient(String token, String projectId, HttpHost httpProxy){
+        this(token, projectId);
+        this.httpProxy = httpProxy;
     }
 
     public String getToken() {
@@ -118,9 +126,21 @@ public class APIClient {
         this.maxRetries = maxRetries;
     }
 
+    public HttpHost getHttpProxy() {
+        return httpProxy;
+    }
+
+    public void setHttpProxy(HttpHost httpProxy) {
+        this.httpProxy = httpProxy;
+    }
+
     private HttpResponse doRequestExecute(HttpRequestBase request) throws APIException {
         HttpClient client = new DefaultHttpClient();
         HttpResponse response = null;
+
+        if (this.httpProxy != null){
+            client.getParams().setParameter(ConnRoutePNames.DEFAULT_PROXY, this.httpProxy);
+        }
 
         int currentTry = 0;
 
