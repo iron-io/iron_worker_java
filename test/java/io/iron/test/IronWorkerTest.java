@@ -25,6 +25,19 @@ public class IronWorkerTest {
     }
 
     @Test
+    public void testViewingTaskInfoAfterTaskCreation() throws IOException, APIException {
+        TaskEntity task = client.createTask("HelloWorkerMono");
+
+        Assert.assertTrue(task.getId().length() > 0);
+        Assert.assertNull(task.getCodeId());
+        Assert.assertNull(task.getCodeName());
+        Assert.assertNull(task.getStatus());
+        Assert.assertNull(task.getPayload());
+        Assert.assertNull(task.getCreatedAt());
+        Assert.assertNull(task.getUpdatedAt());
+    }
+
+    @Test
     public void testGetTaskInfo() throws IOException, APIException, InterruptedException {
         String id = client.createTask("HelloWorkerMono").getId();
         Thread.sleep(1000);
@@ -35,8 +48,8 @@ public class IronWorkerTest {
         Assert.assertTrue(task.getCodeName().length() > 0);
         Assert.assertTrue(task.getStatus().length() > 0);
         Assert.assertTrue(task.getPayload().length() > 0);
-        Assert.assertNotNull(task.getCreatedAt() != null);
-        Assert.assertNotNull(task.getUpdatedAt() != null);
+        Assert.assertNotNull(task.getCreatedAt());
+        Assert.assertNotNull(task.getUpdatedAt());
     }
 
     @Test
@@ -50,8 +63,8 @@ public class IronWorkerTest {
         Assert.assertTrue(task.getCodeName().length() > 0);
         Assert.assertTrue(task.getStatus().length() > 0);
         Assert.assertTrue(task.getPayload().length() > 0);
-        Assert.assertNotNull(task.getCreatedAt() != null);
-        Assert.assertNotNull(task.getUpdatedAt() != null);
+        Assert.assertNotNull(task.getCreatedAt());
+        Assert.assertNotNull(task.getUpdatedAt());
     }
 
     @Test
@@ -71,8 +84,8 @@ public class IronWorkerTest {
         Assert.assertTrue(schedule.getCodeName().length() > 0);
         Assert.assertTrue(schedule.getStatus().length() > 0);
         Assert.assertTrue(schedule.getPayload().length() > 0);
-        Assert.assertNotNull(schedule.getCreatedAt() != null);
-        Assert.assertNotNull(schedule.getUpdatedAt() != null);
+        Assert.assertNotNull(schedule.getCreatedAt());
+        Assert.assertNotNull(schedule.getUpdatedAt());
     }
 
     @Test
@@ -85,7 +98,7 @@ public class IronWorkerTest {
         Assert.assertTrue(schedule.getCodeName().length() > 0);
         Assert.assertTrue(schedule.getStatus().length() > 0);
         Assert.assertTrue(schedule.getPayload().length() > 0);
-        Assert.assertNotNull(schedule.getCreatedAt() != null);
-        Assert.assertNotNull(schedule.getUpdatedAt() != null);
+        Assert.assertNotNull(schedule.getCreatedAt());
+        Assert.assertNotNull(schedule.getUpdatedAt());
     }
 }
