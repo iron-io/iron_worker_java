@@ -108,10 +108,16 @@ public class ScheduleEntity extends BaseEntity {
     }
 
     public Date getCreatedAt() {
-        return parseDate(createdAt);
+        if (createdAt != null) {
+            return parseDate(createdAt);
+        }
+        return null;
     }
 
     public Date getUpdatedAt() {
-        return parseDate(updatedAt);
+        if (updatedAt != null) {
+            return parseDate(updatedAt);
+        }
+        return null;
     }
 }
