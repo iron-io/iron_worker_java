@@ -21,6 +21,8 @@ public class TaskEntity extends BaseEntity {
     String status;
     @SerializedName("cluster")
     String cluster;
+    @SerializedName("label")
+    String label;
     @SerializedName("start_time")
     String startTime;
     @SerializedName("end_time")
@@ -73,6 +75,10 @@ public class TaskEntity extends BaseEntity {
 
     public String getCluster() {
         return cluster;
+    }
+
+    public String getLabel() {
+        return label;
     }
 
     public Date getStartTime() {

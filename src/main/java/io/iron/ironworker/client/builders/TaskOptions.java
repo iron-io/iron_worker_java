@@ -13,6 +13,10 @@ public class TaskOptions {
         return (new TaskOptionsObject()).cluster(cluster);
     }
 
+    public static TaskOptionsObject label(String label) {
+        return (new TaskOptionsObject()).label(label);
+    }
+
     public static TaskOptionsObject delay(int delay) {
         return (new TaskOptionsObject()).delay(delay);
     }

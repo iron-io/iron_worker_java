@@ -47,6 +47,17 @@ public class ScheduleOptionsObject {
         return this;
     }
 
+    public ScheduleOptionsObject cluster(String cluster) {
+        options.put("cluster", cluster);
+
+        return this;
+    }
+
+    public ScheduleOptionsObject label(String label) {
+        options.put("label", label);
+
+        return this;
+    }
     public Map<String, Object> create() {
         return options;
     }

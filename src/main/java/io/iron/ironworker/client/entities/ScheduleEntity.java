@@ -23,6 +23,10 @@ public class ScheduleEntity extends BaseEntity {
     int runEvery;
     @SerializedName("run_times")
     int runTimes;
+    @SerializedName("cluster")
+    String cluster;
+    @SerializedName("label")
+    String label;
     @SerializedName("next_start")
     String nextStart;
     @SerializedName("status")
