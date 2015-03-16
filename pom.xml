@@ -8,7 +8,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.iron.ironworker</groupId>
     <artifactId>ironworker</artifactId>
-    <version>1.0.5-SNAPSHOT</version>
+    <version>1.0.6</version>
     <packaging>jar</packaging>
     <name>ironworker</name>
     <description>An easy-to-use scalable task queue that gives cloud developers a simple way to offload front-end tasks, run scheduled jobs, and process tasks in the background and at scale.
