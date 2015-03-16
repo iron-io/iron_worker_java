@@ -14,7 +14,7 @@ public class IronWorkerTest {
 
     @Before
     public void setUp() throws Exception {
-        client = new Client("WRqfoi1zkHRT5-NJOo6bx8PoZ0c", "52f4419d13a66a0009000004");
+        client = new Client("WRxxxxxxxxxxxxxxxxxxxxxxZ0c", "52f4419d13a66a0009000004");
     }
 
     @Test
