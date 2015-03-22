@@ -153,12 +153,14 @@ public class Client {
         return createTask(codeName, (Map<String, Object>) null, (Map<String, Object>) null);
     }
 
-    public void cancelTask(String taskId) throws APIException {
-        api.tasksCancel(taskId);
+    public boolean cancelTask(String taskId) throws APIException {
+        ResponseMsg message = gson.fromJson(api.tasksCancel(taskId), ResponseMsg.class);
+        return message.getMsg().equals("Cancelled");
     }
 
-    public void cancelAllTasks(String codeId) throws APIException {
-        api.tasksCancelAll(codeId);
+    public boolean cancelAllTasks(String codeId) throws APIException {
+        ResponseMsg message = gson.fromJson(api.tasksCancelAll(codeId), ResponseMsg.class);
+        return message.getMsg().equals("Cancelled");
     }
 
     public String getTaskLog(String taskId) throws APIException {
@@ -241,8 +243,9 @@ public class Client {
         return createSchedule(codeName, (Map<String, Object>) null, (Map<String, Object>) null);
     }
 
-    public void cancelSchedule(String scheduleId) throws APIException {
-        api.schedulesCancel(scheduleId);
+    public boolean cancelSchedule(String scheduleId) throws APIException {
+        ResponseMsg message = gson.fromJson(api.schedulesCancel(scheduleId), ResponseMsg.class);
+        return message.getMsg().equals("Cancelled");
     }
 
     public void reload(TaskEntity entity) throws APIException {
