@@ -37,6 +37,8 @@ public class TaskEntity extends BaseEntity {
     int percent;
     @SerializedName("msg")
     String msg;
+    @SerializedName("schedule_id")
+    String scheduleId;
     @SerializedName("created_at")
     String createdAt;
     @SerializedName("updated_at")
@@ -107,6 +109,10 @@ public class TaskEntity extends BaseEntity {
 
     public String getMsg() {
         return msg;
+    }
+
+    public String getScheduleId() {
+        return scheduleId;
     }
 
     public Date getCreatedAt() {
