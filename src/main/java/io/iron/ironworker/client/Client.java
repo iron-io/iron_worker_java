@@ -56,7 +56,7 @@ public class Client {
     }
 
     public void createCode(BaseCode code) throws APIException {
-        api.codesCreate(code.getName(), code.getFile(), code.getRuntime(), code.getRunner());
+        api.codesCreate(code.getName(), code.getFile(), code.getRuntime(), code.getRunner(), code.getStack());
     }
 
     public void deleteCode(String codeId) throws APIException {
