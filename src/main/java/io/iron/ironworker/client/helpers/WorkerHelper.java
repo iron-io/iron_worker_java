@@ -28,9 +28,9 @@ public class WorkerHelper {
         HashMap<String, String> params = extractParams(args);
 
         helper.environment = params.get("-e");
-        helper.directory = params.get("-d");
-        helper.taskId = params.get("-id");
-        helper.payloadPath = params.get("-payload");
+        helper.directory = (System.getenv("TASK_DIR") != null && !System.getenv("TASK_DIR").isEmpty()) ? System.getenv("TASK_DIR") : params.get("-d");
+        helper.taskId = (System.getenv("TASK_ID") != null && !System.getenv("TASK_ID").isEmpty()) ? System.getenv("TASK_ID") : params.get("-id");
+        helper.payloadPath = (System.getenv("PAYLOAD_FILE") != null && !System.getenv("PAYLOAD_FILE").isEmpty()) ? System.getenv("PAYLOAD_FILE") : params.get("-payload");
         helper.scheduleId = params.get("-schedule_id");
 
         return helper;
