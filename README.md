@@ -52,38 +52,10 @@ Client client = new Client("IRON_IO_TOKEN", "IRON_IO_PROJECT_ID", httpProxy);
 
 ```
 
-## Create Code Package
+## Create a worker and upload it
 
-This isn't implemented in this library yet, so you need to create zip which will contain all jars you need and __runner__.sh which will simply run java executable.
-
-```sh
-root() {
-  while [ $# -gt 0 ]; do
-    if [ "$1" = "-d" ]; then
-      printf "%s\n" "$2"
-      break
-    fi
-  done
-}
-
-cd "$(root "$@")"
-
-java -cp xerces.jar -jar worker.jar "$@"
-
-```
-
-You can also use https://github.com/iron-io/iron_worker_ruby_ng/ to create and upload code package.
-
-## Upload Code Package
-
-You need to specify name by which you'll call your worker later and path to zip created at previous step.
-
-```java
-import io.iron.ironworker.client.codes.JavaCode;
-
-JavaCode code = new JavaCode("MyWorker", "path/to/MyWorker.zip");
-client.createCode(code);
-```
+See here for how to build a Java worker and upload it to Iron.io: 
+https://github.com/iron-io/dockerworker/tree/master/java
 
 ## Run It
 
