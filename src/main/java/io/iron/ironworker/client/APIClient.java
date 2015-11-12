@@ -322,8 +322,10 @@ public class APIClient {
         if (!f.exists()) {
             throw new APIException("File " + file + " not found", null);
         }
-        Map<String, Object> params = Params.create("name", name, "runtime", runtime, "file_name", runner, "stack", stack);
-
+        Map<String, Object> params = Params.create("name", name, "runtime", runtime, "file_name", runner);
+        if(stack != null) {
+            params.put("stack", stack);
+        }
         String data = gson.toJson(params);
 
         return parseResponseAsJson(doFileRequest(String.format("projects/%s/codes", projectId), data, f));
