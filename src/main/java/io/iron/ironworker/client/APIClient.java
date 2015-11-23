@@ -315,6 +315,21 @@ public class APIClient {
 
         return parseResponseAsJson(doFileRequest(String.format("projects/%s/codes", projectId), data, f));
     }
+    
+    public JsonObject codesCreate(String name, String file, String runtime, String runner, String stack) throws APIException {
+        File f = new File(file);
+
+        if (!f.exists()) {
+            throw new APIException("File " + file + " not found", null);
+        }
+        Map<String, Object> params = Params.create("name", name, "runtime", runtime, "file_name", runner);
+        if(stack != null) {
+            params.put("stack", stack);
+        }
+        String data = gson.toJson(params);
+
+        return parseResponseAsJson(doFileRequest(String.format("projects/%s/codes", projectId), data, f));
+    }
 
     public JsonObject codesDelete(String id) throws APIException {
         return parseResponseAsJson(doDeleteRequest(String.format("projects/%s/codes/%s", projectId, id), null));
