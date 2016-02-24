@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import io.iron.ironworker.client.builders.*;
 import io.iron.ironworker.client.codes.BaseCode;
+import io.iron.ironworker.client.encryptors.PayloadEncryptor;
 import io.iron.ironworker.client.entities.*;
 import org.apache.http.HttpHost;
 
@@ -123,9 +124,17 @@ public class Client {
         if (params == null) {
             params = new HashMap<String, Object>();
         }
+        String payload = gson.toJson(params);
+        if(options!=null){
+        	String encryptionKeyFile = (String) options.get("encryptionKeyFile");
+            if (encryptionKeyFile!=null) {
+            	PayloadEncryptor payloadEncryptor = new PayloadEncryptor(encryptionKeyFile);
+            	payload = payloadEncryptor.encryptPayload(payload);
+            }
+        }
 
-        // TODO: implement multiple worker queueing (http://dev.iron.io/worker/reference/api/#queue_a_task)
-        TaskIds taskIds = gson.fromJson(api.tasksCreate(codeName, gson.toJson(params), options), TaskIds.class);
+        // TODO: implement multiple worker queueing (http://dev.iron.io/worker/reference/api/#queue_a_task)        
+        TaskIds taskIds = gson.fromJson(api.tasksCreate(codeName, payload, options), TaskIds.class);
         return taskIds.getTasks()[0];
     }
 
@@ -213,9 +222,17 @@ public class Client {
         if (params == null) {
             params = new HashMap<String, Object>();
         }
+        String payload = gson.toJson(params);
+        if(options!=null){
+        	String encryptionKeyFile = (String) options.get("encryptionKeyFile");
+            if (encryptionKeyFile!=null) {
+            	PayloadEncryptor payloadEncryptor = new PayloadEncryptor(encryptionKeyFile);
+            	payload = payloadEncryptor.encryptPayload(payload);
+            }
+        }
 
         // TODO: implement multiple worker scheduling (http://dev.iron.io/worker/reference/api/#schedule_a_task)
-        ScheduleIds scheduleIds = gson.fromJson(api.schedulesCreate(codeName, gson.toJson(params), options), ScheduleIds.class);
+        ScheduleIds scheduleIds = gson.fromJson(api.schedulesCreate(codeName, payload, options), ScheduleIds.class);
         return scheduleIds.getSchedules()[0];
     }
 

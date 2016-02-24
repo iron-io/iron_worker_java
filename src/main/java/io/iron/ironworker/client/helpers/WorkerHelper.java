@@ -2,8 +2,6 @@ package io.iron.ironworker.client.helpers;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import org.apache.commons.io.IOUtils;
-
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -88,7 +86,6 @@ public class WorkerHelper {
             return payload;
         }
 
-        FileInputStream inputStream = new FileInputStream(payloadPath);
         payload = new String(Files.readAllBytes(Paths.get(payloadPath)));
         return payload;
     }

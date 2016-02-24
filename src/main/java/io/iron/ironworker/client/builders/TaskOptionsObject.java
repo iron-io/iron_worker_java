@@ -39,6 +39,12 @@ public class TaskOptionsObject {
 
         return this;
     }
+    
+    public TaskOptionsObject encryptionKeyFile(String encryptionKeyFile){
+    	options.put("encryptionKeyFile", encryptionKeyFile);
+
+        return this;
+    }
 
     public Map<String, Object> create() {
         return options;
