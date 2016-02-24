@@ -5,15 +5,14 @@ import io.iron.ironworker.client.*;
 import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import java.security.GeneralSecurityException;
 import java.util.Properties;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-
 import java.io.IOException;
 
 public class IronWorkerTest {
-    private String queueName = "java-testing-queue";
     private Client client;
 
     @Before
@@ -33,14 +32,14 @@ public class IronWorkerTest {
     }
 
     @Test
-    public void testCreatingTask() throws IOException, APIException {
+    public void testCreatingTask() throws APIException, GeneralSecurityException, IOException {
         String id = client.createTask("MonoWorker101").getId();
 
         Assert.assertTrue(id.length() > 0);
     }
 
     @Test
-    public void testViewingTaskInfoAfterTaskCreation() throws IOException, APIException {
+    public void testViewingTaskInfoAfterTaskCreation() throws IOException, APIException, GeneralSecurityException {
         TaskEntity task = client.createTask("MonoWorker101");
 
         Assert.assertTrue(task.getId().length() > 0);
@@ -53,7 +52,7 @@ public class IronWorkerTest {
     }
 
     @Test
-    public void testGetTaskInfo() throws IOException, APIException, InterruptedException {
+    public void testGetTaskInfo() throws IOException, APIException, InterruptedException, GeneralSecurityException {
         String id = client.createTask("MonoWorker101").getId();
         Thread.sleep(1000);
         TaskEntity task = client.getTask(id);
@@ -68,7 +67,7 @@ public class IronWorkerTest {
     }
 
     @Test
-    public void testTaskReloadInfo() throws IOException, APIException, InterruptedException {
+    public void testTaskReloadInfo() throws IOException, APIException, GeneralSecurityException, InterruptedException {
         TaskEntity task = client.createTask("MonoWorker101");
         Thread.sleep(1000);
         client.reload(task);
@@ -83,14 +82,14 @@ public class IronWorkerTest {
     }
 
     @Test
-    public void testSchedulingTask() throws IOException, APIException {
+    public void testSchedulingTask() throws IOException, APIException, GeneralSecurityException {
         String id = client.createSchedule("MonoWorker101").getId();
 
         Assert.assertTrue(id.length() > 0);
     }
 
     @Test
-    public void testSchedulingInfo() throws IOException, APIException, InterruptedException {
+    public void testSchedulingInfo() throws IOException, APIException, InterruptedException, GeneralSecurityException {
         String id = client.createSchedule("MonoWorker101").getId();
         Thread.sleep(1000);
         ScheduleEntity schedule = client.getSchedule(id);
@@ -104,7 +103,7 @@ public class IronWorkerTest {
     }
 
     @Test
-    public void testReloadSchedule() throws IOException, APIException, InterruptedException {
+    public void testReloadSchedule() throws IOException, APIException, InterruptedException, GeneralSecurityException {
         ScheduleEntity schedule = client.createSchedule("MonoWorker101");
         Thread.sleep(1000);
         client.reload(schedule);
