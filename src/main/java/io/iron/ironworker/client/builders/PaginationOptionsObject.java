@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class PaginationOptionsObject {
-    private Map<String, Object> options;
+    private final Map<String, Object> options;
 
     public PaginationOptionsObject() {
         options = new HashMap<String, Object>();

@@ -25,9 +25,9 @@ public class PayloadEncryptor {
     private static final int GCM_NONCE_LENGTH = 12; // in bytes
     private static final int GCM_TAG_LENGTH = 16; // in bytes (overhead)
 
-    private PublicKey rsaPublicKey;
-    private Key aesKey;
-    private SecureRandom secureRandom;
+    private final PublicKey rsaPublicKey;
+    private final Key aesKey;
+    private final SecureRandom secureRandom;
 
     public PayloadEncryptor(String encryptionKeyFile) throws GeneralSecurityException, IOException {
         Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());

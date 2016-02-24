@@ -17,8 +17,8 @@ import java.util.List;
 import java.util.Map;
 
 public class Client {
-    private APIClient api;
-    private Gson gson;
+    private final APIClient api;
+    private final Gson gson;
 
     public Client(String token, String projectId) {
         api = new APIClient(token, projectId);

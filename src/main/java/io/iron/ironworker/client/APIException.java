@@ -1,8 +1,8 @@
 package io.iron.ironworker.client;
 
 public class APIException extends Exception {
-    private String message;
-    private Exception innerException;
+    private final String message;
+    private final Exception innerException;
     
     public APIException(String message, Exception innerException) {
         this.message = message;
