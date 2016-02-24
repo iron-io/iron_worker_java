@@ -22,7 +22,7 @@ public class TaskOptions {
     }
     
     public static TaskOptionsObject encryptionKeyFile(String encryptionKeyFile){
-    	return (new TaskOptionsObject()).encryptionKeyFile(encryptionKeyFile);
+        return (new TaskOptionsObject()).encryptionKeyFile(encryptionKeyFile);
     }
 
     protected TaskOptions() {

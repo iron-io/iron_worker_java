@@ -9,6 +9,8 @@ import io.iron.ironworker.client.encryptors.PayloadEncryptor;
 import io.iron.ironworker.client.entities.*;
 import org.apache.http.HttpHost;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -120,45 +122,38 @@ public class Client {
         return gson.fromJson(api.tasksGet(taskId), TaskEntity.class);
     }
 
-    public TaskEntity createTask(String codeName, Map<String, Object> params, Map<String, Object> options) throws APIException {
+    public TaskEntity createTask(String codeName, Map<String, Object> params, Map<String, Object> options) throws GeneralSecurityException, APIException, IOException {
         if (params == null) {
             params = new HashMap<String, Object>();
         }
-        String payload = gson.toJson(params);
-        if(options!=null){
-        	String encryptionKeyFile = (String) options.get("encryptionKeyFile");
-            if (encryptionKeyFile!=null) {
-            	PayloadEncryptor payloadEncryptor = new PayloadEncryptor(encryptionKeyFile);
-            	payload = payloadEncryptor.encryptPayload(payload);
-            }
-        }
+        String payload = loadPayload(params, options);
 
         // TODO: implement multiple worker queueing (http://dev.iron.io/worker/reference/api/#queue_a_task)        
         TaskIds taskIds = gson.fromJson(api.tasksCreate(codeName, payload, options), TaskIds.class);
         return taskIds.getTasks()[0];
     }
 
-    public TaskEntity createTask(String codeName, Map<String, Object> params, TaskOptionsObject options) throws APIException {
+    public TaskEntity createTask(String codeName, Map<String, Object> params, TaskOptionsObject options) throws APIException, GeneralSecurityException, IOException {
         return createTask(codeName, params, options.create());
     }
 
-    public TaskEntity createTask(String codeName, ParamsObject params, Map<String, Object> options) throws APIException {
+    public TaskEntity createTask(String codeName, ParamsObject params, Map<String, Object> options) throws APIException, GeneralSecurityException, IOException {
         return createTask(codeName, params.create(), options);
     }
 
-    public TaskEntity createTask(String codeName, ParamsObject params, TaskOptionsObject options) throws APIException {
+    public TaskEntity createTask(String codeName, ParamsObject params, TaskOptionsObject options) throws APIException, GeneralSecurityException, IOException {
         return createTask(codeName, params.create(), options.create());
     }
 
-    public TaskEntity createTask(String codeName, Map<String, Object> params) throws APIException {
+    public TaskEntity createTask(String codeName, Map<String, Object> params) throws APIException, GeneralSecurityException, IOException {
         return createTask(codeName, params, (Map<String, Object>) null);
     }
 
-    public TaskEntity createTask(String codeName, ParamsObject params) throws APIException {
+    public TaskEntity createTask(String codeName, ParamsObject params) throws APIException, GeneralSecurityException, IOException {
         return createTask(codeName, params.create(), (Map<String, Object>) null);
     }
 
-    public TaskEntity createTask(String codeName) throws APIException {
+    public TaskEntity createTask(String codeName) throws APIException, GeneralSecurityException, IOException {
         return createTask(codeName, (Map<String, Object>) null, (Map<String, Object>) null);
     }
 
@@ -218,45 +213,38 @@ public class Client {
         return gson.fromJson(api.schedulesGet(scheduleId), ScheduleEntity.class);
     }
 
-    public ScheduleEntity createSchedule(String codeName, Map<String, Object> params, Map<String, Object> options) throws APIException {
+    public ScheduleEntity createSchedule(String codeName, Map<String, Object> params, Map<String, Object> options) throws APIException, GeneralSecurityException, IOException {
         if (params == null) {
             params = new HashMap<String, Object>();
         }
-        String payload = gson.toJson(params);
-        if(options!=null){
-        	String encryptionKeyFile = (String) options.get("encryptionKeyFile");
-            if (encryptionKeyFile!=null) {
-            	PayloadEncryptor payloadEncryptor = new PayloadEncryptor(encryptionKeyFile);
-            	payload = payloadEncryptor.encryptPayload(payload);
-            }
-        }
+        String payload = loadPayload(params, options);
 
         // TODO: implement multiple worker scheduling (http://dev.iron.io/worker/reference/api/#schedule_a_task)
         ScheduleIds scheduleIds = gson.fromJson(api.schedulesCreate(codeName, payload, options), ScheduleIds.class);
         return scheduleIds.getSchedules()[0];
     }
 
-    public ScheduleEntity createSchedule(String codeName, Map<String, Object> params, ScheduleOptionsObject options) throws APIException {
+    public ScheduleEntity createSchedule(String codeName, Map<String, Object> params, ScheduleOptionsObject options) throws APIException, GeneralSecurityException, IOException {
         return createSchedule(codeName, params, options.create());
     }
 
-    public ScheduleEntity createSchedule(String codeName, ParamsObject params, Map<String, Object> options) throws APIException {
+    public ScheduleEntity createSchedule(String codeName, ParamsObject params, Map<String, Object> options) throws APIException, GeneralSecurityException, IOException {
         return createSchedule(codeName, params.create(), options);
     }
 
-    public ScheduleEntity createSchedule(String codeName, ParamsObject params, ScheduleOptionsObject options) throws APIException {
+    public ScheduleEntity createSchedule(String codeName, ParamsObject params, ScheduleOptionsObject options) throws APIException, GeneralSecurityException, IOException {
         return createSchedule(codeName, params.create(), options.create());
     }
 
-    public ScheduleEntity createSchedule(String codeName, Map<String, Object> params) throws APIException {
+    public ScheduleEntity createSchedule(String codeName, Map<String, Object> params) throws APIException, GeneralSecurityException, IOException {
         return createSchedule(codeName, params, (Map<String, Object>) null);
     }
 
-    public ScheduleEntity createSchedule(String codeName, ParamsObject params) throws APIException {
+    public ScheduleEntity createSchedule(String codeName, ParamsObject params) throws APIException, GeneralSecurityException, IOException {
         return createSchedule(codeName, params.create(), (Map<String, Object>) null);
     }
 
-    public ScheduleEntity createSchedule(String codeName) throws APIException {
+    public ScheduleEntity createSchedule(String codeName) throws GeneralSecurityException, IOException, APIException {
         return createSchedule(codeName, (Map<String, Object>) null, (Map<String, Object>) null);
     }
 
@@ -285,5 +273,18 @@ public class Client {
         } catch (NoSuchFieldException e) {
             throw new APIException("Impossible to update field: No such field.", e);
         }
+    }
+    
+    private String loadPayload(Map<String, Object> params, Map<String, Object> options) throws GeneralSecurityException, IOException {
+        String payload = gson.toJson(params);
+        if (options != null) {
+            String encryptionKeyFile = (String) options
+                    .get("encryptionKeyFile");
+            if (encryptionKeyFile != null) {
+                PayloadEncryptor payloadEncryptor = new PayloadEncryptor(encryptionKeyFile);
+                payload = payloadEncryptor.encryptPayload(payload);
+            }
+        }
+        return payload;
     }
 }

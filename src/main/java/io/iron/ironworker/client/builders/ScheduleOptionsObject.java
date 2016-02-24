@@ -58,6 +58,13 @@ public class ScheduleOptionsObject {
 
         return this;
     }
+    
+    public ScheduleOptionsObject encryptionKeyFile(String encryptionKeyFile) {
+        options.put("encryptionKeyFile", encryptionKeyFile);
+
+        return this;
+    }
+    
     public Map<String, Object> create() {
         return options;
     }
