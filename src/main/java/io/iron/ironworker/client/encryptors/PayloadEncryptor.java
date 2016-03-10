@@ -4,6 +4,7 @@ import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.StringReader;
 import java.security.GeneralSecurityException;
 import java.security.Key;
 import java.security.KeyFactory;
@@ -15,8 +16,12 @@ import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.spec.GCMParameterSpec;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.bouncycastle.util.encoders.Base64;
+import org.bouncycastle.util.io.pem.PemObject;
+import org.bouncycastle.util.io.pem.PemReader;
 
 public class PayloadEncryptor {
 
@@ -24,19 +29,25 @@ public class PayloadEncryptor {
     private static final int AES_KEY_SIZE = 128; // in bits
     private static final int GCM_NONCE_LENGTH = 12; // in bytes
     private static final int GCM_TAG_LENGTH = 16; // in bytes (overhead)
+    
+    private static final String PEM_FILE_EXTENSION = "pem";
+    private static final String DER_FILE_EXTENSION = "der";
 
     private PublicKey rsaPublicKey;
     private Key aesKey;
     private SecureRandom secureRandom;
 
-    public PayloadEncryptor(String encryptionKeyFile) throws GeneralSecurityException, IOException {
-        Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
-        secureRandom = new SecureRandom();
+    public PayloadEncryptor(String encryptionKey) throws GeneralSecurityException, IOException {
+        init();
+        rsaPublicKey = getPublicKey(encryptionKey);
+    }
+    
+    public PayloadEncryptor(File encryptionKeyFile) throws GeneralSecurityException, IOException {
+        init();
         rsaPublicKey = getPublicKey(encryptionKeyFile);
-        aesKey = generateAESKey();
     }
 
-    public String encryptPayload(String payload) throws GeneralSecurityException {
+    public String encrypt(String payload) throws GeneralSecurityException {
         byte[] aesKeyBytes = aesKey.getEncoded();
         byte[] aesKeyCipher = encryptRSA(aesKeyBytes, rsaPublicKey);
 
@@ -49,18 +60,62 @@ public class PayloadEncryptor {
         System.arraycopy(cipherPayload, 0, ciphertext, 0, cipherPayload.length);
         return new String(Base64.encode(ArrayUtils.addAll(aesKeyCipher, ciphertext)));
     }
+    
+    private void init() throws GeneralSecurityException{
+        Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
+        secureRandom = new SecureRandom();
+        aesKey = generateAESKey();
+    }
+    
+    private PublicKey getPublicKey(String encryptionKey) throws IOException, GeneralSecurityException{
+        PemReader pemReader = new PemReader(new StringReader(encryptionKey));
+        PemObject pemObject = pemReader.readPemObject();
+        pemReader.close();
+        byte[] keyBytes = pemObject.getContent();
+        return generatePublicKeyFromBytes(keyBytes);
+    }
+    
+    private PublicKey getPublicKey(File encryptionKeyFile) throws GeneralSecurityException, IOException {
+        byte[] keyBytes;
+        PublicKey publicKey;
+        String keyFileExtension = FilenameUtils.getExtension(encryptionKeyFile.getName());
+        if(keyFileExtension.equals(PEM_FILE_EXTENSION)){
+            String publicKeyString = FileUtils.readFileToString(encryptionKeyFile);
+            publicKey = getPublicKey(publicKeyString);
+        } else if (keyFileExtension.equals(DER_FILE_EXTENSION)){
+            keyBytes = parseDerFile(encryptionKeyFile);
+            publicKey = generatePublicKeyFromBytes(keyBytes);
+        } else {
+            throw new UnsupportedKeyFileFormatException("Unsupported key file format: "+ keyFileExtension);
+        }
+
+        return publicKey;
+    }    
+
+    private byte[] parseDerFile(File derFile) throws IOException {
+        FileInputStream fis = new FileInputStream(derFile);
+        byte[] keyBytes = new byte[(int) derFile.length()];
+        DataInputStream dis = new DataInputStream(fis);
+        dis.readFully(keyBytes);
+        dis.close();
+        return keyBytes;
+    }
+    
+    private PublicKey generatePublicKeyFromBytes(byte[] keyBytes) throws GeneralSecurityException {
+        X509EncodedKeySpec spec = new X509EncodedKeySpec(keyBytes);
+        KeyFactory kf = KeyFactory.getInstance(Algorithm.RSA);
+        return kf.generatePublic(spec);
+    }
 
     private Key generateAESKey() throws GeneralSecurityException {
-        KeyGenerator generator;
-        generator = KeyGenerator.getInstance("AES", "SunJCE");
+        KeyGenerator generator = KeyGenerator.getInstance(Algorithm.AES);
         generator.init(AES_KEY_SIZE);
-        Key keyToBeWrapped = generator.generateKey();
-        return keyToBeWrapped;
+        Key aesKey = generator.generateKey();
+        return aesKey;
     }
 
     private byte[] encryptRSA(byte[] input, Key publicKey) throws GeneralSecurityException {
-        Cipher cipher;
-        cipher = Cipher.getInstance("RSA/ECB/OAEPWithSHA1AndMGF1Padding");
+        Cipher cipher = Cipher.getInstance(Algorithm.OAEP_WITH_SHA1);
         cipher.init(Cipher.ENCRYPT_MODE, publicKey, secureRandom);
         return encrypt(input, cipher);
     }
@@ -72,26 +127,11 @@ public class PayloadEncryptor {
     }
 
     private Cipher getAesCipher(Key aesKey) throws GeneralSecurityException {
-        Cipher cipher;
         byte[] nonce = new byte[GCM_NONCE_LENGTH];
-        cipher = Cipher.getInstance("AES/GCM/NoPadding", "BC");
+        Cipher cipher = Cipher.getInstance(Algorithm.AES_GCM);        
         secureRandom.nextBytes(nonce);
         GCMParameterSpec spec = new GCMParameterSpec(GCM_TAG_LENGTH * 8, nonce);
         cipher.init(Cipher.ENCRYPT_MODE, aesKey, spec);
-        
         return cipher;
-    }
-
-    private PublicKey getPublicKey(String filename) throws GeneralSecurityException, IOException {
-        File f = new File(filename);
-        FileInputStream fis;
-        fis = new FileInputStream(f);
-        DataInputStream dis = new DataInputStream(fis);
-        byte[] keyBytes = new byte[(int) f.length()];
-        dis.readFully(keyBytes);
-        dis.close();
-        X509EncodedKeySpec spec = new X509EncodedKeySpec(keyBytes);        
-        KeyFactory kf = KeyFactory.getInstance("RSA");
-        return kf.generatePublic(spec);        
     }
 }

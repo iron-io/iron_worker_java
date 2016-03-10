@@ -39,7 +39,13 @@ public class TaskOptionsObject {
 
         return this;
     }
-    
+
+    public TaskOptionsObject encryptionKey(String encryptionKey) {
+        options.put("encryptionKey", encryptionKey);
+
+        return this;
+    }
+
     public TaskOptionsObject encryptionKeyFile(String encryptionKeyFile) {
         options.put("encryptionKeyFile", encryptionKeyFile);
 

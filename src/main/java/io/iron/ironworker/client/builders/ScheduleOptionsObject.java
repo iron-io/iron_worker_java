@@ -59,6 +59,12 @@ public class ScheduleOptionsObject {
         return this;
     }
     
+    public ScheduleOptionsObject encryptionKey(String encryptionKey) {
+        options.put("encryptionKey", encryptionKey);
+
+        return this;
+    }
+    
     public ScheduleOptionsObject encryptionKeyFile(String encryptionKeyFile) {
         options.put("encryptionKeyFile", encryptionKeyFile);
 

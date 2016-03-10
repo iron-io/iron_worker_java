@@ -35,6 +35,10 @@ public class ScheduleOptions {
         return (new ScheduleOptionsObject()).label(label);
     }
     
+    public ScheduleOptionsObject encryptionKey(String encryptionKey){
+        return (new ScheduleOptionsObject()).encryptionKey(encryptionKey);
+    }
+    
     public ScheduleOptionsObject encryptionKeyFile(String encryptionKeyFile){
         return (new ScheduleOptionsObject()).encryptionKeyFile(encryptionKeyFile);
     }

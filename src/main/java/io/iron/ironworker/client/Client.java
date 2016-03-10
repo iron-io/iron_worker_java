@@ -9,6 +9,7 @@ import io.iron.ironworker.client.encryptors.PayloadEncryptor;
 import io.iron.ironworker.client.entities.*;
 import org.apache.http.HttpHost;
 
+import java.io.File;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
@@ -278,11 +279,14 @@ public class Client {
     private String loadPayload(Map<String, Object> params, Map<String, Object> options) throws GeneralSecurityException, IOException {
         String payload = gson.toJson(params);
         if (options != null) {
-            String encryptionKeyFile = (String) options
-                    .get("encryptionKeyFile");
+            String encryptionKeyFile = (String) options.get("encryptionKeyFile");
+            String encryptionKey = (String) options.get("encryptionKey");
             if (encryptionKeyFile != null) {
-                PayloadEncryptor payloadEncryptor = new PayloadEncryptor(encryptionKeyFile);
-                payload = payloadEncryptor.encryptPayload(payload);
+                PayloadEncryptor payloadEncryptor = new PayloadEncryptor(new File(encryptionKeyFile));
+                payload = payloadEncryptor.encrypt(payload);
+            } else if(encryptionKey != null) {
+                PayloadEncryptor payloadEncryptor = new PayloadEncryptor(encryptionKey);
+                payload = payloadEncryptor.encrypt(payload);
             }
         }
         return payload;
