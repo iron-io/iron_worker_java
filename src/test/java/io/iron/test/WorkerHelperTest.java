@@ -83,7 +83,6 @@ public class WorkerHelperTest extends Assert {
         String realPayload = helper.getPayload();
 
         System.out.println(realPayload);
-        String t = "{\"name\":\"test-name-3\",\"max_amount\":66,\"price\":99.99}";
         assertTrue(realPayload.matches(".*\"name\":\\s*\"test-name-3\".*"));
         assertTrue(realPayload.matches(".*\"max_amount\":\\s*66.*"));
         assertTrue(realPayload.matches(".*\"price\":\\s*99.99.*"));

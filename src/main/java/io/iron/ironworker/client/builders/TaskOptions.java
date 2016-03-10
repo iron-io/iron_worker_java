@@ -21,6 +21,10 @@ public class TaskOptions {
         return (new TaskOptionsObject()).delay(delay);
     }
     
+    public static TaskOptionsObject encryptionKey(String encryptionKey){
+        return (new TaskOptionsObject()).encryptionKey(encryptionKey);
+    }
+    
     public static TaskOptionsObject encryptionKeyFile(String encryptionKeyFile){
         return (new TaskOptionsObject()).encryptionKeyFile(encryptionKeyFile);
     }
