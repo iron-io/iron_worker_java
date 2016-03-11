@@ -11,7 +11,7 @@ There are three ways to get this package.
         <dependency>
             <groupId>io.iron.ironworker</groupId>
             <artifactId>ironworker</artifactId>
-            <version>1.0.11</version>
+            <version>LATEST</version>
         </dependency>
     </dependencies>
 ```
