@@ -1,10 +1,10 @@
 package io.iron.ironworker.client.codes;
 
 public class BaseCode {
-    private String name;
-    private String file;
-    private String runtime;
-    private String runner;
+    private final String name;
+    private final String file;
+    private final String runtime;
+    private final String runner;
     private String stack;
 
     public BaseCode(String name, String file, String runtime, String runner) {

@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class TaskOptionsObject {
-    private Map<String, Object> options;
+    private final Map<String, Object> options;
 
     public TaskOptionsObject() {
         options = new HashMap<String, Object>();

@@ -33,9 +33,9 @@ public class PayloadEncryptor {
     private static final String PEM_FILE_EXTENSION = "pem";
     private static final String DER_FILE_EXTENSION = "der";
 
-    private PublicKey rsaPublicKey;
-    private Key aesKey;
-    private SecureRandom secureRandom;
+    private final PublicKey rsaPublicKey;
+    private final Key aesKey;
+    private final SecureRandom secureRandom;
 
     public PayloadEncryptor(String encryptionKey) throws GeneralSecurityException, IOException {
         init();
